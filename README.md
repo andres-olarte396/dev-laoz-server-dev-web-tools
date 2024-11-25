@@ -49,6 +49,10 @@ Para iniciar el servidor utilizando Vagrant, sigue estos pasos:
         npm start
     ```
 
+## Repositorios incluidos en el servidor
+
+Estas herramientas están diseñadas para facilitar tareas comunes en el desarrollo web y pueden ayudar a mejorar tu productividad. Te invito a probar cada una de ellas y ver cómo pueden integrarse en tu flujo de trabajo diario.
+
 ### 1. Generador de Código QR
 
 **Descripción**: Una herramienta sencilla para generar códigos QR a partir de una URL o texto. Ideal para compartir enlaces de manera rápida y efectiva.
@@ -165,8 +169,6 @@ Para iniciar el servidor utilizando Vagrant, sigue estos pasos:
 
 ### 20. Conversor de Unidades numéricas
 
-**Descripción**: Esta aplicación web permite convertir números entre diferentes sistemas de numeración de forma rápida y sencilla. Soporta varias bases, incluyendo binario, decimal, octal, hexadecimal, ternario, quintal, vigesimal y BCD. Con solo ingresar un número en cualquier sistema, puedes ver automáticamente su equivalente en los demás, lo que facilita el   prendizaje y la comprensión de diferentes sistemas numéricos..
+**Descripción**: Esta aplicación web permite convertir números entre diferentes sistemas de numeración de forma rápida y sencilla. Soporta varias bases, incluyendo binario, decimal, octal, hexadecimal, ternario, quintal, vigesimal y BCD. Con solo ingresar un número en cualquier sistema, puedes ver automáticamente su equivalente en los demás, lo que facilita el  aprendizaje y la comprensión de diferentes sistemas numéricos.
 
 - **Prueba el conversor de unidades**: [Enlace al conversor de sistemas de numeración](https://github.com/andres-olarte396/dev-laoz-UnitConversor)
-
-Estas herramientas están diseñadas para facilitar tareas comunes en el desarrollo web y pueden ayudar a mejorar tu productividad. Te invito a probar cada una de ellas y ver cómo pueden integrarse en tu flujo de trabajo diario.
