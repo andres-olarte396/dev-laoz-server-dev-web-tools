@@ -11,8 +11,6 @@ echo "Eliminando archivos y carpetas innecesarios..."
 find "$PROJECT_DIR" -name "*.gitignore" -type f -exec rm -f {} +
 # Eliminar archivos .md
 find "$PROJECT_DIR" -name "*.md" -type f -exec rm -f {} +
-# Eliminar archivos previamente minificados
-find "$PROJECT_DIR" -name "*.min.*" -type f -exec rm -f {} +
 # Eliminar carpeta .git y su contenido
 find "$PROJECT_DIR" -name ".git" -type d -exec rm -rf {} +
 
