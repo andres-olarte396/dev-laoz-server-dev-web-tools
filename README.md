@@ -165,10 +165,16 @@ Estas herramientas están diseñadas para facilitar tareas comunes en el desarro
 
 **Descripción**:  Encuentra rápidamente el emoji de Git adecuado a partir de un archivo JSON con todos los emojis de Git. Útil para proyectos web que necesitan íconos o visuales de emojis.
 
-- **Prueba el buscador**: [Prueba el conversor de unidades](https://github.com/andres-olarte396/dev-laoz-gitmojis/)
+- **Prueba el buscador**: [Prueba el conversor de unidades](https://github.com/andres-olarte396/dev-laoz-EmojiSearch/)
 
 ### 20. Conversor de Unidades numéricas
 
 **Descripción**: Esta aplicación web permite convertir números entre diferentes sistemas de numeración de forma rápida y sencilla. Soporta varias bases, incluyendo binario, decimal, octal, hexadecimal, ternario, quintal, vigesimal y BCD. Con solo ingresar un número en cualquier sistema, puedes ver automáticamente su equivalente en los demás, lo que facilita el  aprendizaje y la comprensión de diferentes sistemas numéricos.
 
 - **Prueba el conversor de unidades**: [Enlace al conversor de sistemas de numeración](https://github.com/andres-olarte396/dev-laoz-UnitConversor)
+
+### 21. Extractor de datos desde Tablas HTML
+
+**Descripción**: Este proyecto permite extraer datos de tablas en un documento HTML, incluyendo los vínculos presentes en las celdas de las tablas. Los datos extraídos se muestran en formato JSON y pueden copiarse al portapapeles.
+
+- **Prueba el extractor de datos**: [Enlace al extractor de datos](https://github.com/andres-olarte396/dev-laoz-table-to-json)
