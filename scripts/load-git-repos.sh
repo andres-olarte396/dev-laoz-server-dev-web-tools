@@ -24,14 +24,14 @@ index_file="$destination_dir/index.html"
 if [ -f "$index_file_source" ]; then
     # Si el archivo ya existe en el destino, se elimina
     if [ -f "$index_file" ]; then
-        rm -f "$index_file" || { echo "Error al eliminar $index_file"; exit 1; }
+        rm -f "$index_file" || { echo -e "${RED}Error al eliminar $index_file"; exit 1; }
     fi
 
     # Copiar el archivo desde el directorio de origen al destino
-    cp "$index_file_source" "$index_file" || { echo "Error al mover $index_file_source a $index_file"; exit 1; }
+    cp "$index_file_source" "$index_file" || { echo -e "${RED}Error al mover $index_file_source a $index_file"; exit 1; }
     echo "Archivo movido desde $source_dir a $destination_dir"
 else
-    echo "El archivo index.html no existe en el directorio de origen: $source_dir"
+    echo -e "${RED}El archivo index.html no existe en el directorio de origen: $source_dir ${NC}"
 fi
 
 echo -e "${GREEN}Inicio de la descarga y sincronización de proyectos desde Git ${NC}"
@@ -41,7 +41,7 @@ repos_file="/vagrant/scripts/repos.txt"
 
 # Comprobar si el archivo de repositorios existe
 if [ ! -f "$repos_file" ]; then
-    echo "Error: El archivo $repos_file no existe."
+    echo -e "${RED}Error: El archivo $repos_file no existe."
     exit 1
 fi
 
@@ -63,7 +63,7 @@ for repo in "${repos[@]}"; do
 
     # Verificar si el repositorio ya está clonado
     if [ -d "$repo_path/.git" ]; then
-        echo "El repositorio $repo_name ya está clonado. Actualizando..."
+        echo -e "${RED}El repositorio $repo_name ya está clonado. Actualizando...${NC}"
         cd "$repo_path" || exit
         
         # Agregar el directorio a la lista de directorios seguros de Git
@@ -74,7 +74,7 @@ for repo in "${repos[@]}"; do
         if git reset --hard; then
             echo "Cambios locales descartados en $repo_name."
         else
-            echo "Error al descartar cambios locales en $repo_name."
+            echo -e "${RED}Error al descartar cambios locales en $repo_name.${NC}"
             cd .. || exit
             continue
         fi
@@ -83,7 +83,7 @@ for repo in "${repos[@]}"; do
         if git fetch --all; then
             echo "Cambios remotos obtenidos para $repo_name."
         else
-            echo "Error al obtener cambios remotos en $repo_name."
+            echo -e "${RED}Error al obtener cambios remotos en $repo_name.${NC}"
             cd .. || exit
             continue
         fi
@@ -92,7 +92,7 @@ for repo in "${repos[@]}"; do
         if git reset --hard origin/$main_branch; then
             echo "Sincronización completada para $repo_name."
         else
-            echo "Error al sincronizar $repo_name."
+            echo -e "${RED}Error al sincronizar $repo_name.${NC}"
         fi
 
         # Cambiar al directorio principal
