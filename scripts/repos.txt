@@ -18,5 +18,5 @@ https://github.com/andres-olarte396/dev-laoz-XML-JSON-Validator
 https://github.com/andres-olarte396/dev-laoz-CurrencyConversor
 https://github.com/andres-olarte396/dev-laoz-EmojiSearch
 https://github.com/andres-olarte396/dev-laoz-UnitConversor
-https://github.com/andres-olarte396/dev-laoz-WaveArtCSS
 https://github.com/andres-olarte396/dev-laoz-table-to-json
+https://github.com/andres-olarte396/dev-laoz-WaveArtCSS

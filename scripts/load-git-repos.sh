@@ -1,5 +1,17 @@
 #!/bin/bash
 
+# Definimos colores para los mensajes
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m' # Sin color
+
+# Instalar Git
+apt-get install -y git
+echo -e "${GREEN}Instalación de git completada.${NC}"
+
+# Crear la carpeta donde se clonarán los proyectos
+mkdir -p /var/www/html
+
 # Directorio de origen donde se encuentra el archivo index.html
 source_dir="/vagrant"
 index_file_source="$source_dir/index.html"
@@ -22,7 +34,7 @@ else
     echo "El archivo index.html no existe en el directorio de origen: $source_dir"
 fi
 
-echo "Inicio de la descarga y sincronización de proyectos desde Git"
+echo -e "${GREEN}Inicio de la descarga y sincronización de proyectos desde Git ${NC}"
 
 # Archivo que contiene la lista de repositorios (actualiza la ruta aquí)
 repos_file="/vagrant/scripts/repos.txt"
@@ -89,6 +101,10 @@ for repo in "${repos[@]}"; do
         echo "Clonando el repositorio $repo_name..."
         git clone "$repo" "$repo_path"
     fi
+
+    # Dar permisos de ejecución al script de minificación
+    chmod +x /vagrant/scripts/clean_and_minify.sh
+    bash /vagrant/scripts/clean_and_minify.sh "$repo_path"
 done
 
-echo "Todos los proyectos se han descargado, sincronizado y configurado correctamente."
+echo -e "${GREEN}Todos los proyectos se han descargado, sincronizado y configurado correctamente.${NC}"
