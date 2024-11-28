@@ -20,6 +20,36 @@ index_file_source="$source_dir/index.html"
 destination_dir="/var/www/html"
 index_file="$destination_dir/index.html"
 
+detect_technology() {
+    local repo_path=$1
+    if [ -f "$repo_path/index.html" ] && [ -d "$repo_path/js" ]; then
+        chmod +x /vagrant/scripts/install_nginx.sh
+        bash /vagrant/scripts/install_nginx.sh
+    fi
+    
+    if [ -f "$repo_path/index.php" ]; then
+        chmod +x /vagrant/scripts/install_php.sh
+        bash /vagrant/scripts/install_php.sh        
+    fi
+    
+    if [ -f "$repo_path/pom.xml" ] || [ -d "$repo_path/src/main/java" ]; then
+        chmod +x /vagrant/scripts/install_sprint_boot.sh
+        bash /vagrant/scripts/install_sprint_boot.sh
+    fi
+
+    if [ -f "$repo_path/package.json" ]; then
+        chmod +x /vagrant/scripts/install_nodejs.sh
+        bash /vagrant/scripts/install_nodejs.sh
+    fi
+    
+    if [ -f "$repo_path/*.csproj" ]; then
+        chmod +x /vagrant/scripts/install_dotnet_nginx.sh
+        bash /vagrant/scripts/install_dotnet_nginx.sh
+    fi
+
+    echo "desconocida"
+}
+
 # Mover el archivo index.html desde el directorio de origen al de destino
 if [ -f "$index_file_source" ]; then
     # Si el archivo ya existe en el destino, se elimina
@@ -71,30 +101,33 @@ for repo in "${repos[@]}"; do
         
         # Descarta definitivamente los cambios locales
         echo "Descartando cambios locales en $repo_name..."
-        if git reset --hard; then
-            echo "Cambios locales descartados en $repo_name."
-        else
+
+        if ! git reset --hard; then
             echo -e "${RED}Error al descartar cambios locales en $repo_name.${NC}"
             cd .. || exit
             continue
         fi
-        
+
+        echo "Cambios locales descartados en $repo_name."
+
         # Obtener todos los cambios remotos
-        if git fetch --all; then
-            echo "Cambios remotos obtenidos para $repo_name."
-        else
+        if ! git fetch --all; then
             echo -e "${RED}Error al obtener cambios remotos en $repo_name.${NC}"
             cd .. || exit
             continue
         fi
-        
-        # Sincronizar con la rama remota
-        if git reset --hard origin/$main_branch; then
-            echo "Sincronización completada para $repo_name."
-        else
-            echo -e "${RED}Error al sincronizar $repo_name.${NC}"
-        fi
 
+        echo "Cambios remotos obtenidos para $repo_name."
+
+        # Sincronizar con la rama remota
+        if ! git reset --hard origin/$main_branch; then
+            echo -e "${RED}Error al sincronizar $repo_name.${NC}"
+            cd .. || exit
+            continue
+        fi
+        
+        echo "Sincronización completada para $repo_name."
+        
         # Cambiar al directorio principal
         cd .. || exit
     else
@@ -105,6 +138,11 @@ for repo in "${repos[@]}"; do
     # Dar permisos de ejecución al script de minificación
     chmod +x /vagrant/scripts/clean_and_minify.sh
     bash /vagrant/scripts/clean_and_minify.sh "$repo_path"
+
+    # Detectar la tecnología del repositorio   
+    echo -e "${GREEN}Detectando tecnología del repositorio $repo_name...${NC}"
+    tech=$(detect_technology "$repo_path")
+    echo -e "${GREEN}Tecnología detectada para $repo_name: ${tech}${NC}"
 done
 
 echo -e "${GREEN}Todos los proyectos se han descargado, sincronizado y configurado correctamente.${NC}"
