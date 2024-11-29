@@ -20,36 +20,6 @@ index_file_source="$source_dir/index.html"
 destination_dir="/var/www/html"
 index_file="$destination_dir/index.html"
 
-detect_technology() {
-    local repo_path=$1
-    if [ -f "$repo_path/index.html" ] && [ -d "$repo_path/js" ]; then
-        chmod +x /vagrant/scripts/install_nginx.sh
-        bash /vagrant/scripts/install_nginx.sh
-    fi
-    
-    if [ -f "$repo_path/index.php" ]; then
-        chmod +x /vagrant/scripts/install_php.sh
-        bash /vagrant/scripts/install_php.sh        
-    fi
-    
-    if [ -f "$repo_path/pom.xml" ] || [ -d "$repo_path/src/main/java" ]; then
-        chmod +x /vagrant/scripts/install_sprint_boot.sh
-        bash /vagrant/scripts/install_sprint_boot.sh
-    fi
-
-    if [ -f "$repo_path/package.json" ]; then
-        chmod +x /vagrant/scripts/install_nodejs.sh
-        bash /vagrant/scripts/install_nodejs.sh
-    fi
-    
-    if [ -f "$repo_path/*.csproj" ]; then
-        chmod +x /vagrant/scripts/install_dotnet_nginx.sh
-        bash /vagrant/scripts/install_dotnet_nginx.sh
-    fi
-
-    echo "desconocida"
-}
-
 # Mover el archivo index.html desde el directorio de origen al de destino
 if [ -f "$index_file_source" ]; then
     # Si el archivo ya existe en el destino, se elimina
@@ -75,6 +45,37 @@ if [ ! -f "$repos_file" ]; then
     exit 1
 fi
 
+install_technology() {
+    local repo_path=$1
+    
+    # Detectar PHP (index.php)
+    if find "$repo_path" -type f -name ".php" | grep -q .; then
+        chmod +x /vagrant/scripts/install_php.sh
+        bash /vagrant/scripts/install_php.sh
+        echo "Tecnología instalada: PHP"
+        return
+    fi
+    
+    # Detectar Spring Boot (pom.xml o src/main/java)
+    if find "$repo_path" -type f -name "pom.xml" | grep -q . || find "$repo_path" -type d -path "*/src/main/java" | grep -q .; then
+        chmod +x /vagrant/scripts/install_sprint_boot.sh
+        bash /vagrant/scripts/install_sprint_boot.sh
+        echo "Tecnología instalada: Spring Boot"
+        return
+    fi
+  
+    # Detectar .NET (archivos *.csproj)
+    if find "$repo_path" -type f -name "*.csproj" | grep -q .; then
+        chmod +x /vagrant/scripts/install_dotnet_nginx.sh
+        bash /vagrant/scripts/install_dotnet_nginx.sh
+        echo "Tecnología instalada: .NET"
+        return
+    fi
+
+    # Si no se detecta ninguna tecnología conocida
+    echo "Tecnología desconocida para el repositorio en $repo_path"
+}
+
 # Leer los repositorios del archivo, eliminando saltos de línea y espacios en blanco
 mapfile -t repos < <(cat "$repos_file" | tr -d '\r' | sed 's/^[ \t]*//;s/[ \t]*$//')
 
@@ -91,6 +92,7 @@ for repo in "${repos[@]}"; do
     repo_name=$(basename "$repo" .git)
     repo_path="/var/www/html/$repo_name"
 
+    echo -e "${GREEN}Procesando el repositorio $repo_name...${NC}"
     # Verificar si el repositorio ya está clonado
     if [ -d "$repo_path/.git" ]; then
         echo -e "${RED}El repositorio $repo_name ya está clonado. Actualizando...${NC}"
@@ -135,14 +137,14 @@ for repo in "${repos[@]}"; do
         git clone "$repo" "$repo_path"
     fi
 
+    # Detectar la tecnología del repositorio   
+    echo -e "${GREEN}Detectando tecnología del repositorio $repo_name...${NC}"
+    tech=$(install_technology "$repo_path")
+    echo -e "${GREEN}Tecnología detectada para $repo_name: ${tech}${NC}"
+
     # Dar permisos de ejecución al script de minificación
     chmod +x /vagrant/scripts/clean_and_minify.sh
     bash /vagrant/scripts/clean_and_minify.sh "$repo_path"
-
-    # Detectar la tecnología del repositorio   
-    echo -e "${GREEN}Detectando tecnología del repositorio $repo_name...${NC}"
-    tech=$(detect_technology "$repo_path")
-    echo -e "${GREEN}Tecnología detectada para $repo_name: ${tech}${NC}"
 done
 
 echo -e "${GREEN}Todos los proyectos se han descargado, sincronizado y configurado correctamente.${NC}"

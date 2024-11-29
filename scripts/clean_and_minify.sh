@@ -19,17 +19,6 @@ if [ ! -d "$PROJECT_DIR" ]; then
     exit 1
 fi
 
-# Eliminar archivos y carpetas innecesarios
-echo "Eliminando archivos y carpetas innecesarios del directorio: $PROJECT_DIR ..."
-# Eliminar archivos .gitignore
-find "$PROJECT_DIR" -name "*.gitignore" -type f -exec rm -f {} +
-# Eliminar archivos .md
-find "$PROJECT_DIR" -name "*.md" -type f -exec rm -f {} +
-# Eliminar la carpeta .git completa
-find "$PROJECT_DIR" -name ".git" -type d -exec rm -rf {} +
-
-echo "Archivos y carpetas innecesarios eliminados del directorio: $PROJECT_DIR."
-
 # Minificar archivos JS
 echo "Iniciando minificación de archivos JS del directorio: $PROJECT_DIR ..."
 find "$PROJECT_DIR" -name "*.js" | while read js_file; do
@@ -52,3 +41,14 @@ find "$PROJECT_DIR" -name "*.html" | while read html_file; do
 done
 
 echo -e "${GREEN}Todos los archivos del directorio: $PROJECT_DIR se han limpiado y minificado.${NC}"
+
+# Eliminar archivos y carpetas innecesarios
+echo "Eliminando archivos y carpetas innecesarios del directorio: $PROJECT_DIR ..."
+# Eliminar archivos .gitignore
+find "$PROJECT_DIR" -name "*.gitignore" -type f -exec rm -f {} +
+# Eliminar archivos .md
+find "$PROJECT_DIR" -name "*.md" -type f -exec rm -f {} +
+# Eliminar la carpeta .git completa
+find "$PROJECT_DIR" -name ".git" -type d -exec rm -rf {} +
+
+echo "Archivos y carpetas innecesarios eliminados del directorio: $PROJECT_DIR."
