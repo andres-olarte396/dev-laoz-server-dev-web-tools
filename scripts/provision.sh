@@ -8,11 +8,6 @@ NC='\033[0m' # Sin color
 # Actualizar sistema
 apt-get update
 
-# Instalar Git
-chmod +x /vagrant/scripts/load-git-repos.sh
-bash /vagrant/scripts/load-git-repos.sh
-echo "Tecnología instalada: Git"
-
 # Instalar HTML + JavaScript (index.html y directorio js)
 chmod +x /vagrant/scripts/install_nginx.sh
 bash /vagrant/scripts/install_nginx.sh
@@ -22,5 +17,9 @@ echo "Tecnología instalada: HTML + JavaScript"
 chmod +x /vagrant/scripts/install_nodejs.sh
 bash /vagrant/scripts/install_nodejs.sh
 echo "Tecnología instalada: Node.js"
+
+# Instalar Git
+chmod +x /vagrant/scripts/load-git-repos.sh
+bash /vagrant/scripts/load-git-repos.sh
 
 echo "El servidor web está listo para usarse: http://localhost:8080/index.html"
