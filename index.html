@@ -5,7 +5,6 @@
   <title>Utilidades para Desarrollo Web</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="../dev-laoz-WaveArtCSS/src/theme.css" />
   <link rel="stylesheet" href="../dev-laoz-WaveArtCSS/src/base.css" />
   <link rel="stylesheet" href="../dev-laoz-WaveArtCSS/src/components.css" />
   <link rel="stylesheet" href="../dev-laoz-WaveArtCSS/src/utilities.css" />
@@ -22,7 +21,7 @@
       desarrollo web y mejorar tu productividad. Explóralas a continuación:
     </p>
     <div>
-      <input type="text" id="searchInput" placeholder="Busca una utilidad por nombre o descripción..."
+      <input type="search" id="searchInput" placeholder="Busca una utilidad por nombre o descripción..."
         onkeyup="filterAccordion()" />
     </div>
     <div class="accordion" id="toolsAccordion">
@@ -31,7 +30,7 @@
         <div class="accordion-header" id="heading1">
           1. Generador de Código QR
         </div>
-        <div class="accordion-content">
+        <div class="accordion-content" aria-labelledby="heading1">
           <strong>Descripción:</strong> Una herramienta sencilla para generar
           códigos QR a partir de una URL o texto. Ideal para compartir enlaces
           de manera rápida y efectiva.
@@ -44,7 +43,7 @@
         <div class="accordion-header" id="heading2">
           2. Decodificador de Hash
         </div>
-        <div class="accordion-content">
+        <div class="accordion-content" aria-labelledby="heading2">
           <strong>Descripción:</strong> Decodifica valores hash para
           verificar contenido original, compatible con varios algoritmos
           comunes.
@@ -57,7 +56,7 @@
         <div class="accordion-header" id="heading3">
           3. Selector de Iconos
         </div>
-        <div class="accordion-content">
+        <div class="accordion-content" aria-labelledby="heading3">
           <strong>Descripción:</strong> Un buscador para encontrar rápidamente
           iconos de Font Awesome o Material Icons. Genera el HTML necesario
           para integrarlos en tus proyectos.
@@ -70,7 +69,7 @@
         <div class="accordion-header" id="heading4">
           4. Codificación y Decodificación de URI
         </div>
-        <div class="accordion-content">
+        <div class="accordion-content" aria-labelledby="heading4">
           <strong>Descripción:</strong> Una herramienta para codificar y
           decodificar URLs, útil para trabajar con parámetros de manera
           segura.
@@ -83,7 +82,7 @@
         <div class="accordion-header" id="heading5">
           5. Conversor de Color
         </div>
-        <div class="accordion-content">
+        <div class="accordion-content" aria-labelledby="heading5">
           <strong>Descripción:</strong> Convierte colores entre formatos HEX y
           RGB/HSLA. Incluye una paleta de colores que muestra combinaciones
           útiles.
@@ -96,7 +95,7 @@
         <div class="accordion-header" id="heading6">
           6. Generador de Slugs
         </div>
-        <div class="accordion-content">
+        <div class="accordion-content" aria-labelledby="heading6">
           <strong>Descripción:</strong> Convierte texto en slugs (URLs
           amigables), ideal para crear rutas limpias para blogs o sitios web.
           <br />
@@ -108,7 +107,7 @@
         <div class="accordion-header" id="heading7">
           7. Generador de Contraseñas Seguras
         </div>
-        <div class="accordion-content">
+        <div class="accordion-content" aria-labelledby="heading7">
           <strong>Descripción:</strong> Crea contraseñas robustas con opciones
           de longitud y tipos de caracteres, asegurando la seguridad de tus
           cuentas.
@@ -121,7 +120,7 @@
         <div class="accordion-header" id="heading8">
           8. Decodificador de JWT
         </div>
-        <div class="accordion-content">
+        <div class="accordion-content" aria-labelledby="heading8">
           <strong>Descripción:</strong> Decodifica JSON Web Tokens para
           inspeccionar su contenido sin necesidad de la clave privada.
           <br />
@@ -133,7 +132,7 @@
         <div class="accordion-header" id="heading9">
           9. Buscador de Emojis
         </div>
-        <div class="accordion-content">
+        <div class="accordion-content" aria-labelledby="heading9">
           <strong>Descripción:</strong> Encuentra rápidamente el emoji
           adecuado a partir de un archivo JSON con todos los emojis de Git.
           Útil para proyectos web que necesitan íconos o visuales de emojis.
@@ -146,7 +145,7 @@
         <div class="accordion-header" id="heading10">
           10. Codificador/Decodificador Base64
         </div>
-        <div class="accordion-content">
+        <div class="accordion-content" aria-labelledby="heading10">
           <strong>Descripción:</strong> Una herramienta para codificar y
           decodificar texto en formato Base64, útil para tareas como la
           transmisión de datos binarios en formato de texto.
@@ -159,8 +158,7 @@
         <div class="accordion-header" id="heading11">
           11. Generador de Lorem Ipsum Personalizado
         </div>
-        <div id="collapse11" class="accordion-collapse collapse" aria-labelledby="heading11"
-          data-bs-parent="#toolsAccordion">
+        <div id="collapse11" class="accordion-content" aria-labelledby="heading11" data-bs-parent="#toolsAccordion">
           <div class="accordion-content">
             <strong>Descripción</strong>: Un generador de texto aleatorio que
             permite crear "dummy text" en diferentes longitudes y estilos para
@@ -175,8 +173,7 @@
         <div class="accordion-header" id="heading12">
           12. Conversor de JSON a YAML / YAML a JSON
         </div>
-        <div id="collapse12" class="accordion-collapse collapse" aria-labelledby="heading12"
-          data-bs-parent="#toolsAccordion">
+        <div id="collapse12" class="accordion-content" aria-labelledby="heading12" data-bs-parent="#toolsAccordion">
           <div class="accordion-content">
             <strong>Descripción</strong>: Una herramienta que convierte entre
             formatos JSON y YAML, útil para proyectos con archivos de
@@ -191,8 +188,7 @@
         <div class="accordion-header" id="heading13">
           13. Conversor de Unidades (px, rem, em, % para CSS)
         </div>
-        <div id="collapse13" class="accordion-collapse collapse" aria-labelledby="heading13"
-          data-bs-parent="#toolsAccordion">
+        <div id="collapse13" class="accordion-content" aria-labelledby="heading13" data-bs-parent="#toolsAccordion">
           <div class="accordion-content">
             <strong>Descripción:</strong> Convierte unidades de medida CSS
             <br />
@@ -205,12 +201,11 @@
         <div class="accordion-header" id="heading14">
           14. Expresiones Regulares Tester
         </div>
-        <div id="collapse14" class="accordion-collapse collapse" aria-labelledby="heading14"
-          data-bs-parent="#toolsAccordion">
+        <div id="collapse14" class="accordion-content" aria-labelledby="heading14" data-bs-parent="#toolsAccordion">
           <div class="accordion-content">
             <strong>Descripción</strong>: Una herramienta para escribir, probar y
-        verificar expresiones regulares en tiempo real, ayudando a ajustar las
-        expresiones según sea necesario.
+            verificar expresiones regulares en tiempo real, ayudando a ajustar las
+            expresiones según sea necesario.
             <br />
             <a href="/dev-laoz-RegexTester/">Prueba el tester de expresiones regulares</a>
           </div>
@@ -221,8 +216,7 @@
         <div class="accordion-header" id="heading15">
           15. Conversor de Tiempo Unix
         </div>
-        <div id="collapse15" class="accordion-collapse collapse" aria-labelledby="heading15"
-          data-bs-parent="#toolsAccordion">
+        <div id="collapse15" class="accordion-content" aria-labelledby="heading15" data-bs-parent="#toolsAccordion">
           <div class="accordion-content">
             <strong>Descripción</strong>: Una utilidad que convierte timestamps
             Unix a una fecha legible y viceversa, útil para depuración o
@@ -237,8 +231,7 @@
         <div class="accordion-header" id="heading16">
           16. Minificador de JavaScript y CSS
         </div>
-        <div id="collapse16" class="accordion-collapse collapse" aria-labelledby="heading16"
-          data-bs-parent="#toolsAccordion">
+        <div id="collapse16" class="accordion-content" aria-labelledby="heading16" data-bs-parent="#toolsAccordion">
           <div class="accordion-content">
             <strong>Descripción</strong>: Herramientas para minificar y
             desminificar archivos CSS y JavaScript, mejorando el rendimiento o
@@ -253,11 +246,10 @@
         <div class="accordion-header" id="heading17">
           17. Validación de JSON y XML
         </div>
-        <div id="collapse17" class="accordion-collapse collapse" aria-labelledby="heading17"
-          data-bs-parent="#toolsAccordion">
+        <div id="collapse17" class="accordion-content" aria-labelledby="heading17" data-bs-parent="#toolsAccordion">
           <div class="accordion-content">
             <strong>Descripción</strong>: Un validador rápido para estructuras
-        JSON o XML, útil cuando trabajas con APIs o archivos de configuración.
+            JSON o XML, útil cuando trabajas con APIs o archivos de configuración.
             <br />
             <a href="/dev-laoz-XML-JSON-Validator/">Prueba el validador de JSON y XML</a>
           </div>
@@ -268,12 +260,11 @@
         <div class="accordion-header" id="heading18">
           18. Conversor de Monedas
         </div>
-        <div id="collapse18" class="accordion-collapse collapse" aria-labelledby="heading18"
-          data-bs-parent="#toolsAccordion">
+        <div id="collapse18" class="accordion-content" aria-labelledby="heading18" data-bs-parent="#toolsAccordion">
           <div class="accordion-content">
             <strong>Descripción</strong>: Una herramienta sencilla para convertir
-        entre diferentes tipos de cambio usando APIs públicas, ideal para
-        proyectos que requieren manejar monedas.
+            entre diferentes tipos de cambio usando APIs públicas, ideal para
+            proyectos que requieren manejar monedas.
             <br />
             <a href="/dev-laoz-CurrencyConversor/">Utiliza el conversor de monedas</a>
           </div>
@@ -284,12 +275,11 @@
         <div class="accordion-header" id="heading19">
           19. Buscador de Emojis de Git
         </div>
-        <div id="collapse19" class="accordion-collapse collapse" aria-labelledby="heading19"
-          data-bs-parent="#toolsAccordion">
+        <div id="collapse19" class="accordion-content" aria-labelledby="heading19" data-bs-parent="#toolsAccordion">
           <div class="accordion-content">
             <strong>Descripción</strong>: Encuentra rápidamente el emoji de Git
-        adecuado a partir de un archivo JSON con todos los emojis de Git. Útil
-        para proyectos web que necesitan íconos o visuales de emojis.
+            adecuado a partir de un archivo JSON con todos los emojis de Git. Útil
+            para proyectos web que necesitan íconos o visuales de emojis.
             <br />
             <a href="/dev-laoz-gitmojis/">Busca tus emojis aquí</a>
           </div>
@@ -300,16 +290,15 @@
         <div class="accordion-header" id="heading20">
           20. Conversor de Unidades numéricas
         </div>
-        <div id="collapse20" class="accordion-collapse collapse" aria-labelledby="heading20"
-          data-bs-parent="#toolsAccordion">
+        <div id="collapse20" class="accordion-content" aria-labelledby="heading20" data-bs-parent="#toolsAccordion">
           <div class="accordion-content">
             <strong>Descripción</strong>: Esta aplicación web permite convertir
-        números entre diferentes sistemas de numeración de forma rápida y
-        sencilla. Soporta varias bases, incluyendo binario, decimal, octal,
-        hexadecimal, ternario, quintal, vigesimal y BCD. Con solo ingresar un
-        número en cualquier sistema, puedes ver automáticamente su equivalente
-        en los demás, lo que facilita el prendizaje y la comprensión de
-        diferentes sistemas numéricos.
+            números entre diferentes sistemas de numeración de forma rápida y
+            sencilla. Soporta varias bases, incluyendo binario, decimal, octal,
+            hexadecimal, ternario, quintal, vigesimal y BCD. Con solo ingresar un
+            número en cualquier sistema, puedes ver automáticamente su equivalente
+            en los demás, lo que facilita el prendizaje y la comprensión de
+            diferentes sistemas numéricos.
             <br />
             <a href="/dev-laoz-UnitConversor/">Prueba el conversor de sistemas de numeración</a>
           </div>
@@ -320,39 +309,54 @@
         <div class="accordion-header" id="heading21">
           21. Enlace al extractor de datos
         </div>
-        <div id="collapse21" class="accordion-collapse collapse" aria-labelledby="heading21"
-          data-bs-parent="#toolsAccordion">
+        <div id="collapse21" class="accordion-content" aria-labelledby="heading21" data-bs-parent="#toolsAccordion">
           <div class="accordion-content">
-            <strong>Descripción</strong>: Este proyecto permite extraer datos de tablas en un documento HTML, incluyendo los vínculos presentes en las
-        celdas de las tablas. Los datos extraídos se muestran en formato JSON y pueden copiarse al portapapeles.
+            <strong>Descripción</strong>: Este proyecto permite extraer datos de tablas en un documento HTML, incluyendo
+            los vínculos presentes en las celdas de las tablas. Los datos extraídos se muestran en formato JSON y pueden
+            copiarse al portapapeles.
             <br />
             <a href="/dev-laoz-table-to-json/">Extrae los datos de las tablas HTML aquí</a>
           </div>
         </div>
       </div>
-      
+      <!-- Item 22 -->
+      <div class="accordion-item">
+        <div class="accordion-header" id="heading22">
+          22. Plantilla base de proyecto HTML
+        </div>
+        <div id="collapse21" class="accordion-content" aria-labelledby="heading22" data-bs-parent="#toolsAccordion">
+          <div class="accordion-content">
+            <strong>Descripción</strong>: Este proyecto proporciona una plantilla base para proyectos HTML, incluyendo
+            una estructura de carpetas y archivos comunes, así como enlaces a recursos útiles.
+            <br />
+            <a href="/dev-laoz-HTML-Project-Base/">
+              Utiliza la plantilla base de proyecto HTML
+            </a>
+          </div>
+        </div>
+      </div>
       <!-- Item 23 -->
       <div class="accordion-item">
-        <div class="accordion-header" id="heading12">
+        <div class="accordion-header" id="heading23">
           23. Conversor de unidades de datos (Bytes, KB, MB, GB, TB)
         </div>
-        <div id="collapse12" class="accordion-collapse collapse" aria-labelledby="heading12"
-          data-bs-parent="#toolsAccordion">
+        <div id="collapse12" class="accordion-content" aria-labelledby="heading23" data-bs-parent="#toolsAccordion">
           <div class="accordion-content">
-            <strong>Descripción:</strong> Permite realizar las siguientes operaciones relacionadas con datos y velocidad:
+            <strong>Descripción:</strong> Permite realizar las siguientes operaciones relacionadas con datos y
+            velocidad:
             <ul>
               <li>
                 Conversión entre unidades de almacenamiento de datos (Bytes, KB, MB, GB, TB).
               </li>
-              <li>  
-            Conversión entre unidades de velocidad de datos (bps, Kbps, Mbps, Gbps).                
+              <li>
+                Conversión entre unidades de velocidad de datos (bps, Kbps, Mbps, Gbps).
               </li>
               <li>
                 Cálculo del tiempo de descarga según el tamaño del archivo y la velocidad de descarga.
               </li>
             </ul>
             <br />
-            <a href="/dev-laoz-DataCalculator/"> 
+            <a href="/dev-laoz-DataCalculator/">
               Utiliza el conversor de unidades de datos
             </a>
           </div>
@@ -360,11 +364,10 @@
       </div>
       <!-- Item 24 -->
       <div class="accordion-item">
-        <div class="accordion-header" id="heading14">
+        <div class="accordion-header" id="heading24">
           24. Simulador de Latencia de Red
         </div>
-        <div id="collapse14" class="accordion-collapse collapse" aria-labelledby="heading14"
-          data-bs-parent="#toolsAccordion">
+        <div id="collapse14" class="accordion-content" aria-labelledby="heading24" data-bs-parent="#toolsAccordion">
           <div class="accordion-content">
             <strong>Descripción:</strong> Una herramienta para probar
             aplicaciones simulando diferentes velocidades y latencias de red.
@@ -375,11 +378,10 @@
       </div>
       <!-- Item 25 -->
       <div class="accordion-item">
-        <div class="accordion-header" id="heading15">
+        <div class="accordion-header" id="heading25">
           25. Calculadora de Checksum
         </div>
-        <div id="collapse15" class="accordion-collapse collapse" aria-labelledby="heading15"
-          data-bs-parent="#toolsAccordion">
+        <div id="collapse15" class="accordion-content" aria-labelledby="heading25" data-bs-parent="#toolsAccordion">
           <div class="accordion-content">
             <strong>Descripción:</strong> Genera checksums para validar la
             integridad de archivos y datos usando MD5, SHA-1, y más.
@@ -390,11 +392,10 @@
       </div>
       <!-- Item 26 -->
       <div class="accordion-item">
-        <div class="accordion-header" id="heading16">
+        <div class="accordion-header" id="heading26">
           26. Generador de Fechas Aleatorias
         </div>
-        <div id="collapse16" class="accordion-collapse collapse" aria-labelledby="heading16"
-          data-bs-parent="#toolsAccordion">
+        <div id="collapse16" class="accordion-content" aria-labelledby="heading26" data-bs-parent="#toolsAccordion">
           <div class="accordion-content">
             <strong>Descripción:</strong> Genera fechas aleatorias dentro de
             un rango específico. Útil para pruebas de datos.
@@ -405,11 +406,10 @@
       </div>
       <!-- Item 27 -->
       <div class="accordion-item">
-        <div class="accordion-header" id="heading17">
+        <div class="accordion-header" id="heading27">
           27. Calculadora de Expresiones Regulares
         </div>
-        <div id="collapse17" class="accordion-collapse collapse" aria-labelledby="heading17"
-          data-bs-parent="#toolsAccordion">
+        <div id="collapse17" class="accordion-content" aria-labelledby="heading27" data-bs-parent="#toolsAccordion">
           <div class="accordion-content">
             <strong>Descripción:</strong> Valida y prueba expresiones
             regulares en tiempo real con datos de ejemplo.
@@ -420,11 +420,10 @@
       </div>
       <!-- Item 28 -->
       <div class="accordion-item">
-        <div class="accordion-header" id="heading18">
+        <div class="accordion-header" id="heading28">
           28. Conversor de Longitudes
         </div>
-        <div id="collapse18" class="accordion-collapse collapse" aria-labelledby="heading18"
-          data-bs-parent="#toolsAccordion">
+        <div id="collapse18" class="accordion-content" aria-labelledby="heading28" data-bs-parent="#toolsAccordion">
           <div class="accordion-content">
             <strong>Descripción:</strong> Convierte unidades de longitud entre
             metros, pies, pulgadas, y más.
@@ -435,11 +434,10 @@
       </div>
       <!-- Item 29 -->
       <div class="accordion-item">
-        <div class="accordion-header" id="heading19">
+        <div class="accordion-header" id="heading29">
           29. Generador de Nombres Aleatorios
         </div>
-        <div id="collapse19" class="accordion-collapse collapse" aria-labelledby="heading19"
-          data-bs-parent="#toolsAccordion">
+        <div id="collapse19" class="accordion-content" aria-labelledby="heading29" data-bs-parent="#toolsAccordion">
           <div class="accordion-content">
             <strong>Descripción:</strong> Crea nombres de usuario o personas
             ficticias de manera aleatoria para pruebas o juegos.
@@ -450,25 +448,24 @@
       </div>
       <!-- Item 30 -->
       <div class="accordion-item">
-        <div class="accordion-header" id="heading20">
+        <div class="accordion-header" id="heading30">
           30. Editor de Texto Markdown
         </div>
-        <div id="collapse20" class="accordion-collapse collapse" aria-labelledby="heading20"
-          data-bs-parent="#toolsAccordion">
+        <div id="collapse20" class="accordion-content" aria-labelledby="heading30" data-bs-parent="#toolsAccordion">
           <div class="accordion-content">
             <strong>Descripción:</strong> Un editor que permite escribir y
             previsualizar contenido en formato Markdown.
             <br />
             <a href="/dev-laoz-MarkdownEditor/">Prueba el editor</a>
           </div>
-        </div>        
+        </div>
+      </div>
       <!-- Item 31 -->
       <div class="accordion-item">
-        <div class="accordion-header" id="heading21">
+        <div class="accordion-header" id="heading31">
           31. Creador de Tablas HTML
         </div>
-        <div id="collapse21" class="accordion-collapse collapse" aria-labelledby="heading21"
-          data-bs-parent="#toolsAccordion">
+        <div id="collapse21" class="accordion-content" aria-labelledby="heading31" data-bs-parent="#toolsAccordion">
           <div class="accordion-content">
             <strong>Descripción:</strong> Genera tablas HTML personalizables
             para incluir en tus proyectos web.
@@ -477,9 +474,11 @@
           </div>
         </div>
       </div>
-      </div>   
     </div>
   </main>
+  <footer>
+    <p>© 2024 Mi Negocio. Todos los derechos reservados.</p>
+  </footer>
   <script>
     // JavaScript para controlar el acordeón
     document.querySelectorAll('.accordion-header').forEach(header => {
@@ -509,4 +508,5 @@
     }
   </script>
 </body>
+
 </html>

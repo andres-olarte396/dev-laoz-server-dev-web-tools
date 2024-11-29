@@ -20,4 +20,5 @@ https://github.com/andres-olarte396/dev-laoz-EmojiSearch
 https://github.com/andres-olarte396/dev-laoz-UnitConversor
 https://github.com/andres-olarte396/dev-laoz-table-to-json
 https://github.com/andres-olarte396/dev-laoz-DataCalculator
+https://github.com/andres-olarte396/dev-laoz-HTML-Project-Base
 https://github.com/andres-olarte396/dev-laoz-WaveArtCSS
