@@ -62,50 +62,18 @@ for repo in "${repos[@]}"; do
     repo_path="/var/www/html/$repo_name"
 
     echo -e "${GREEN}Procesando el repositorio $repo_name...${NC}"
+    
     # Verificar si el repositorio ya está clonado
-    if [ -d "$repo_path/.git" ]; then
-        echo -e "${RED}El repositorio $repo_name ya está clonado. Actualizando...${NC}"
-        cd "$repo_path" || exit
-        
-        # Agregar el directorio a la lista de directorios seguros de Git
-        git config --global --add safe.directory "$repo_path"
-        
-        # Descarta definitivamente los cambios locales
-        echo "Descartando cambios locales en $repo_name..."
-
-        if ! git reset --hard; then
-            echo -e "${RED}Error al descartar cambios locales en $repo_name.${NC}"
-            cd .. || exit
-            continue
-        fi
-
-        echo "Cambios locales descartados en $repo_name."
-
-        # Obtener todos los cambios remotos
-        if ! git fetch --all; then
-            echo -e "${RED}Error al obtener cambios remotos en $repo_name.${NC}"
-            cd .. || exit
-            continue
-        fi
-
-        echo "Cambios remotos obtenidos para $repo_name."
-
-        # Sincronizar con la rama remota
-        if ! git reset --hard origin/$main_branch; then
-            echo -e "${RED}Error al sincronizar $repo_name.${NC}"
-            cd .. || exit
-            continue
-        fi
-        
-        echo "Sincronización completada para $repo_name."
-        
-        # Cambiar al directorio principal
-        cd .. || exit
-    else
-        echo "Clonando el repositorio $repo_name..."
-        git clone "$repo" "$repo_path"
+    if [ -d "$repo_path" ]; then
+        echo -e "${RED}El directorio destino $repo_path ya existe. Eliminando...${NC}"
+        rm -rf "$repo_path" || { echo -e "${RED}Error al eliminar el directorio $repo_path.${NC}"; exit 1; }
+        echo "Directorio eliminado: $repo_path."
     fi
 
+    # Clonar el repositorio
+    echo "Clonando el repositorio $repo_name..."
+    git clone "$repo" "$repo_path"
+    
     # Dar permisos de ejecución al script de minificación
     chmod +x /vagrant/scripts/clean_and_minify.sh
     bash /vagrant/scripts/clean_and_minify.sh "$repo_path"
