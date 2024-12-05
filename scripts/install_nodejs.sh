@@ -78,11 +78,27 @@ else
     echo -e "${RED}No se encontró el archivo package.json en /vagrant. Saltando la instalación de dependencias.${NC}"
 fi
 
-# Instalar herramientas de minificación solo si no están instaladas
-echo -e "${GREEN}Instalando herramientas de minificación...${NC}"
-npm list -g uglify-js >/dev/null 2>&1 || npm install -g uglify-js || { echo -e "${RED}Error al instalar uglify-js.${NC}"; exit 1; }
-npm list -g csso-cli >/dev/null 2>&1 || npm install -g csso-cli || { echo -e "${RED}Error al instalar csso-cli.${NC}"; exit 1; }
-npm list -g html-minifier-terser >/dev/null 2>&1 || npm install -g html-minifier-terser || { echo -e "${RED}Error al instalar html-minifier-terser.${NC}"; exit 1; }
+
+# Verificar e instalar dependencias necesarias
+declare -A DEPENDENCIES=(
+    ["uglifyjs"]="uglify-js"
+    ["csso"]="csso-cli"
+    ["html-minifier-terser"]="html-minifier-terser"
+)
+
+echo -e "${GREEN}Verificando dependencias necesarias...${NC}"
+for command in "${!DEPENDENCIES[@]}"; do
+    if ! command -v "$command" &> /dev/null; then
+        echo -e "${RED}$command no está instalado. Instalando...${NC}"
+        npm install -g "${DEPENDENCIES[$command]}"
+        if [ $? -ne 0 ]; then
+            echo -e "${RED}Error al instalar ${DEPENDENCIES[$command]}.${NC}"
+            exit 1
+        fi
+    else
+        echo -e "${GREEN}$command ya está instalado.${NC}"
+    fi
+done
 echo -e "${GREEN}Herramientas de minificación instaladas correctamente.${NC}"
 
 echo -e "${GREEN}Instalación y configuración completadas.${NC}"

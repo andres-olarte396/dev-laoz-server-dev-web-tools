@@ -19,27 +19,6 @@ if [ ! -d "$PROJECT_DIR" ]; then
     exit 1
 fi
 
-# Verificar e instalar dependencias necesarias
-declare -A DEPENDENCIES=(
-    ["uglifyjs"]="uglify-js"
-    ["csso"]="csso-cli"
-    ["html-minifier-terser"]="html-minifier-terser"
-)
-
-echo -e "${GREEN}Verificando dependencias necesarias...${NC}"
-for command in "${!DEPENDENCIES[@]}"; do
-    if ! command -v "$command" &> /dev/null; then
-        echo -e "${RED}$command no está instalado. Instalando...${NC}"
-        npm install -g "${DEPENDENCIES[$command]}"
-        if [ $? -ne 0 ]; then
-            echo -e "${RED}Error al instalar ${DEPENDENCIES[$command]}.${NC}"
-            exit 1
-        fi
-    else
-        echo -e "${GREEN}$command ya está instalado.${NC}"
-    fi
-done
-
 # Minificar archivos JS
 echo "Iniciando minificación de archivos JS del directorio: $PROJECT_DIR ..."
 find "$PROJECT_DIR" -name "*.js" | while read js_file; do

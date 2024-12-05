@@ -48,7 +48,7 @@ fi
 # Mostrar la clave pública para que la agregues a GitHub si es nueva
 if [ -f "$ssh_pub_key" ]; then
     echo -e "${GREEN}Clave pública generada:${NC}"
-    cat "$ssh_pub_key"
+    cat "$ssh_pub_key\n"
     echo -e "${RED}Si no lo has hecho, agrega esta clave a tu cuenta de GitHub en https://github.com/settings/keys${NC}"
 fi
 
