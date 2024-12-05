@@ -15,9 +15,30 @@ echo -e "${GREEN}Inicio del proceso de limpieza y minificación de archivos en $
 
 # Verificar si el directorio existe
 if [ ! -d "$PROJECT_DIR" ]; then
-    echo "Error: El directorio $PROJECT_DIR no existe."
+    echo -e "${RED}Error: El directorio $PROJECT_DIR no existe.${NC}"
     exit 1
 fi
+
+# Verificar e instalar dependencias necesarias
+declare -A DEPENDENCIES=(
+    ["uglifyjs"]="uglify-js"
+    ["csso"]="csso-cli"
+    ["html-minifier-terser"]="html-minifier-terser"
+)
+
+echo -e "${GREEN}Verificando dependencias necesarias...${NC}"
+for command in "${!DEPENDENCIES[@]}"; do
+    if ! command -v "$command" &> /dev/null; then
+        echo -e "${RED}$command no está instalado. Instalando...${NC}"
+        npm install -g "${DEPENDENCIES[$command]}"
+        if [ $? -ne 0 ]; then
+            echo -e "${RED}Error al instalar ${DEPENDENCIES[$command]}.${NC}"
+            exit 1
+        fi
+    else
+        echo -e "${GREEN}$command ya está instalado.${NC}"
+    fi
+done
 
 # Minificar archivos JS
 echo "Iniciando minificación de archivos JS del directorio: $PROJECT_DIR ..."

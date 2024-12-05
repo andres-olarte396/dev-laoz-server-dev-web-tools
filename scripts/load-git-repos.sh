@@ -22,17 +22,20 @@ if [ -f "$ssh_key" ] && [ -f "$ssh_pub_key" ]; then
     echo -e "${GREEN}Claves SSH existentes encontradas en $ssh_key.${NC}"
 else
     # Generar nuevas claves SSH si no existen
-    echo -e "${GREEN}No se encontraron claves SSH. Generando nuevas claves en $ssh_key...${NC}"
     ssh-keygen -t ed25519 -C "vagrant@local" -f "$ssh_key" -q -N ""
     echo -e "${GREEN}Clave SSH generada correctamente.${NC}"
 fi
+
+chmod 600 /vagrant/keys/id_ed25519
+chmod 600 /vagrant/keys/id_ed25519.pub
 
 # Iniciar el agente SSH
 echo -e "${GREEN}Iniciando el agente SSH...${NC}"
 eval "$(ssh-agent -s)"
 
 # Agregar la clave privada al agente SSH
-ssh-add "$ssh_key"
+echo -e "${GREEN}Agregando clave privada al agente${NC}"
+ssh-add /vagrant/keys/id_ed25519 || { echo -e "${RED}Error al agregar la clave SSH al agente.${NC}"; exit 1; }    
 
 # Verificar que la clave está en el agente
 if ssh-add -l > /dev/null 2>&1; then
