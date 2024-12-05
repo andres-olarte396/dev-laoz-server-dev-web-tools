@@ -49,9 +49,16 @@ if [ -f "$ssh_pub_key" ]; then
     echo -e "${RED}Si no lo has hecho, agrega esta clave a tu cuenta de GitHub en https://github.com/settings/keys${NC}"
 fi
 
-# Pausa de 2 minutos para agregar la clave en GitHub
-echo -e "${GREEN}Pausando por 2 minutos para que tengas tiempo de agregar la clave...${NC}"
-sleep 120
+# Validar autenticación en GitHub
+echo -e "${GREEN}Verificando autenticación con GitHub...${NC}"
+if git ls-remote git@github.com: > /dev/null 2>&1; then
+    echo -e "${GREEN}Autenticación con GitHub verificada correctamente.${NC}"
+else
+    echo -e "${RED}Error: No se pudo autenticar con GitHub. Asegúrate de haber agregado tu clave SSH a tu cuenta.${NC}"
+    # Pausa de 2 minutos para agregar la clave en GitHub
+    echo -e "${GREEN}Pausando por 2 minutos para que tengas tiempo de agregar la clave...${NC}"
+    sleep 120
+fi
 
 # Configurar la lista de hosts conocidos para GitHub
 echo -e "${GREEN}Configurando hosts conocidos para GitHub...${NC}"
