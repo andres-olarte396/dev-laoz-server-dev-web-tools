@@ -12,8 +12,8 @@ if node -v >/dev/null 2>&1; then
     echo -e "${GREEN}Node.js ya está instalado: $(node -v).${NC}"
 else
     echo -e "${GREEN}Node.js no está instalado. Procediendo con la instalación...${NC}"
-    curl -fsSL https://deb.nodesource.com/setup_16.x | bash - || { echo -e "${RED}Error al configurar el repositorio de Node.js.${NC}"; exit 1; }
-    apt-get install -y nodejs || { echo -e "${RED}Error al instalar Node.js.${NC}"; exit 1; }
+    curl -fsSL https://deb.nodesource.com/setup_current.x | sudo bash -
+    sudo apt-get install -y nodejs
     echo -e "${GREEN}Node.js instalado correctamente: $(node -v).${NC}"
 fi
 
@@ -22,19 +22,9 @@ if npm -v >/dev/null 2>&1; then
     echo -e "${GREEN}npm ya está instalado: $(npm -v).${NC}"
 else
     echo -e "${GREEN}npm no está instalado. Procediendo con la instalación...${NC}"
-    apt-get install -y npm || { echo -e "${RED}Error al instalar npm.${NC}"; exit 1; }
+    # Instalar una ultima versión de npm
+    npm install -g npm@latest
     echo -e "${GREEN}npm instalado correctamente: $(npm -v).${NC}"
-fi
-
-# Actualizar npm a una versión específica
-desired_npm_version="10.9.0"
-current_npm_version=$(npm -v)
-if [ "$current_npm_version" != "$desired_npm_version" ]; then
-    echo -e "${GREEN}Actualizando npm a la versión $desired_npm_version...${NC}"
-    npm install -g npm@"$desired_npm_version" || { echo -e "${RED}Error al actualizar npm.${NC}"; exit 1; }
-    echo -e "${GREEN}npm actualizado correctamente a la versión $(npm -v).${NC}"
-else
-    echo -e "${GREEN}npm ya está en la versión deseada: $current_npm_version.${NC}"
 fi
 
 # Crear archivo de configuración del servicio Node.js solo si no existe
@@ -69,36 +59,12 @@ echo -e "${GREEN}Habilitando y arrancando el servicio Node.js...${NC}"
 systemctl enable node-server || { echo -e "${RED}Error al habilitar el servicio de Node.js.${NC}"; exit 1; }
 systemctl start node-server || { echo -e "${RED}Error al iniciar el servicio de Node.js.${NC}"; exit 1; }
 
-# Instalar dependencias de Node.js en el proyecto
-if [ -f "/vagrant/package.json" ]; then
-    echo -e "${GREEN}Instalando dependencias de Node.js en el proyecto...${NC}"
-    cd /vagrant
-    npm install || { echo -e "${RED}Error al instalar dependencias del proyecto.${NC}"; exit 1; }
-else
-    echo -e "${RED}No se encontró el archivo package.json en /vagrant. Saltando la instalación de dependencias.${NC}"
-fi
-
-
-# Verificar e instalar dependencias necesarias
-declare -A DEPENDENCIES=(
-    ["uglifyjs"]="uglify-js"
-    ["csso"]="csso-cli"
-    ["html-minifier-terser"]="html-minifier-terser"
-)
-
-echo -e "${GREEN}Verificando dependencias necesarias...${NC}"
-for command in "${!DEPENDENCIES[@]}"; do
-    if ! command -v "$command" &> /dev/null; then
-        echo -e "${RED}$command no está instalado. Instalando...${NC}"
-        npm install -g "${DEPENDENCIES[$command]}"
-        if [ $? -ne 0 ]; then
-            echo -e "${RED}Error al instalar ${DEPENDENCIES[$command]}.${NC}"
-            exit 1
-        fi
-    else
-        echo -e "${GREEN}$command ya está instalado.${NC}"
-    fi
-done
+# Instalar herramientas de minificación solo si no están instaladas
+echo -e "${GREEN}Instalando herramientas de minificación...${NC}"
+npm list -g html-minifier-terser >/dev/null 2>&1 || npm install -g html-minifier-terser || { echo -e "${RED}Error al instalar html-minifier-terser.${NC}"; exit 1; }
+npm list -g csso-cli >/dev/null 2>&1 || npm install -g csso-cli || { echo -e "${RED}Error al instalar csso-cli.${NC}"; exit 1; }
+npm list -g uglify-js >/dev/null 2>&1 || npm install -g uglify-js || { echo -e "${RED}Error al instalar uglify-js.${NC}"; exit 1; }
 echo -e "${GREEN}Herramientas de minificación instaladas correctamente.${NC}"
+
 
 echo -e "${GREEN}Instalación y configuración completadas.${NC}"

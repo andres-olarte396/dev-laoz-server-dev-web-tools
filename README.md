@@ -1,4 +1,4 @@
-# Potencia tu Desarrollo Web con Estas Herramientas Útiles
+# Desarrollo Web con Estas Herramientas Útiles
 
 En el mundo del desarrollo web, contar con herramientas eficientes puede marcar la diferencia en la productividad y en la calidad del trabajo final. En este artículo, presento una serie de herramientas que he desarrollado y que pueden facilitar diversas tareas cotidianas. Desde la generación de códigos QR hasta la creación de contraseñas seguras, estas utilidades están diseñadas para optimizar tu flujo de trabajo.
 

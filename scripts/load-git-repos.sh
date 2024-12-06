@@ -13,6 +13,9 @@ echo -e "${GREEN}Instalación de Git y OpenSSH completada.${NC}"
 # Crear carpeta para claves SSH si no existe
 mkdir -p /vagrant/keys
 
+chmod 600 /vagrant/keys/id_ed25519
+chmod 600 /vagrant/keys/id_ed25519.pub
+
 # Rutas de las claves SSH
 ssh_key="/vagrant/keys/id_ed25519"
 ssh_pub_key="/vagrant/keys/id_ed25519.pub"
@@ -26,16 +29,13 @@ else
     echo -e "${GREEN}Clave SSH generada correctamente.${NC}"
 fi
 
-chmod 600 /vagrant/keys/id_ed25519
-chmod 600 /vagrant/keys/id_ed25519.pub
-
 # Iniciar el agente SSH
 echo -e "${GREEN}Iniciando el agente SSH...${NC}"
 eval "$(ssh-agent -s)"
 
 # Agregar la clave privada al agente SSH
 echo -e "${GREEN}Agregando clave privada al agente${NC}"
-ssh-add /vagrant/keys/id_ed25519 || { echo -e "${RED}Error al agregar la clave SSH al agente.${NC}"; exit 1; }    
+ssh-add "$ssh_key" || { echo -e "${RED}Error al agregar la clave SSH al agente.${NC}"; exit 1; }    
 
 # Verificar que la clave está en el agente
 if ssh-add -l > /dev/null 2>&1; then
@@ -48,7 +48,7 @@ fi
 # Mostrar la clave pública para que la agregues a GitHub si es nueva
 if [ -f "$ssh_pub_key" ]; then
     echo -e "${GREEN}Clave pública generada:${NC}"
-    cat "$ssh_pub_key\n"
+    cat "$ssh_pub_key"
     echo -e "${RED}Si no lo has hecho, agrega esta clave a tu cuenta de GitHub en https://github.com/settings/keys${NC}"
 fi
 
@@ -131,10 +131,19 @@ for repo in "${repos[@]}"; do
     # Clonar el repositorio usando la clave SSH
     echo "Clonando el repositorio $repo_name..."
     git clone "$repo" "$repo_path" || { echo -e "${RED}Error al clonar el repositorio $repo.${NC}"; exit 1; }
-  
+
     # Dar permisos de ejecución al script de minificación
     chmod +x /vagrant/scripts/clean_and_minify.sh
     bash /vagrant/scripts/clean_and_minify.sh "$repo_path"
+
+    # Instalar dependencias de Node.js en el proyecto
+    if [ -f "$repo_path/package.json" ]; then
+        echo -e "${GREEN}Instalando dependencias de Node.js en el proyecto...${NC}"
+        cd /vagrant
+        npm install || { echo -e "${RED}Error al instalar dependencias del proyecto.${NC}"; exit 1; }
+    else
+        echo -e "${RED}No se encontró el archivo package.json en $repo_path. Saltando la instalación de dependencias.${NC}"
+    fi
 done
 
 echo -e "${GREEN}Todos los proyectos se han descargado y configurado correctamente.${NC}"
