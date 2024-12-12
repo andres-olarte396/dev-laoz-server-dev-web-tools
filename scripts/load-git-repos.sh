@@ -59,7 +59,7 @@ if git ls-remote git@github.com: > /dev/null 2>&1; then
 else
     echo -e "${RED}Error: No se pudo autenticar con GitHub. Asegúrate de haber agregado tu clave SSH a tu cuenta.${NC}"
     # Pausa de 2 minutos para agregar la clave en GitHub
-    echo -e "${GREEN}Pausando por 2 minutos para que tengas tiempo de agregar la clave...${NC}"
+    echo -e "${GREEN}Pausando por 1 minutos para que tengas tiempo de agregar la clave...${NC}"
     sleep 60
 fi
 
@@ -116,6 +116,14 @@ for repo in "${repos[@]}"; do
         continue
     fi
 
+    # agrega validación de acceso al repositorio GitHub
+    if git ls-remote "$repo" > /dev/null 2>&1; then
+        echo -e "${GREEN}Acceso al repositorio $repo verificado.${NC}"
+    else
+        echo -e "${RED}Error: No se pudo acceder al repositorio $repo. Verifica la URL y tu clave SSH.${NC}"
+        continue # Salta al siguiente repositorio
+    fi
+
     repo_name=$(basename "$repo" .git)
     repo_path="/var/www/html/$repo_name"
 
@@ -126,7 +134,7 @@ for repo in "${repos[@]}"; do
         echo -e "${RED}El directorio destino $repo_path ya existe. Eliminando...${NC}"
         rm -rf "$repo_path" || { echo -e "${RED}Error al eliminar el directorio $repo_path.${NC}"; exit 1; }
         echo "Directorio eliminado: $repo_path."
-    fi
+    fi 
 
     # Clonar el repositorio usando la clave SSH
     echo "Clonando el repositorio $repo_name..."

@@ -18,6 +18,11 @@ chmod +x /vagrant/scripts/install_nodejs.sh
 bash /vagrant/scripts/install_nodejs.sh
 echo "Tecnología instalada: Node.js"
 
+# Instalar PHP (index.php)
+chmod +x /vagrant/scripts/install_php.sh
+bash /vagrant/scripts/install_php.sh
+echo "Tecnología instalada: PHP"
+
 # Instalar Git
 chmod +x /vagrant/scripts/load-git-repos.sh
 bash /vagrant/scripts/load-git-repos.sh

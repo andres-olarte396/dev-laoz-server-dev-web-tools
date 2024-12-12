@@ -6,7 +6,6 @@ GREEN='\033[0;32m'
 NC='\033[0m' # Sin color
 
 echo -e "${GREEN}Inicio del proceso de instalación o actualización de Node.js y npm.${NC}"
-
 # Verificar si Node.js está instalado
 if node -v >/dev/null 2>&1; then
     echo -e "${GREEN}Node.js ya está instalado: $(node -v).${NC}"
@@ -26,6 +25,13 @@ else
     npm install -g npm@latest
     echo -e "${GREEN}npm instalado correctamente: $(npm -v).${NC}"
 fi
+
+# Instalar herramientas de minificación solo si no están instaladas
+echo -e "${GREEN}Instalando herramientas de minificación...${NC}"
+npm list -g html-minifier-terser >/dev/null 2>&1 || npm install -g html-minifier-terser || { echo -e "${RED}Error al instalar html-minifier-terser.${NC}"; exit 1; }
+npm list -g csso-cli >/dev/null 2>&1 || npm install -g csso-cli || { echo -e "${RED}Error al instalar csso-cli.${NC}"; exit 1; }
+npm list -g uglify-js >/dev/null 2>&1 || npm install -g uglify-js || { echo -e "${RED}Error al instalar uglify-js.${NC}"; exit 1; }
+echo -e "${GREEN}Herramientas de minificación instaladas correctamente.${NC}"
 
 # Crear archivo de configuración del servicio Node.js solo si no existe
 node_service_path="/etc/systemd/system/node-server.service"
@@ -59,12 +65,5 @@ echo -e "${GREEN}Habilitando y arrancando el servicio Node.js...${NC}"
 systemctl enable node-server || { echo -e "${RED}Error al habilitar el servicio de Node.js.${NC}"; exit 1; }
 systemctl start node-server || { echo -e "${RED}Error al iniciar el servicio de Node.js.${NC}"; exit 1; }
 
-# Instalar herramientas de minificación solo si no están instaladas
-echo -e "${GREEN}Instalando herramientas de minificación...${NC}"
-npm list -g html-minifier-terser >/dev/null 2>&1 || npm install -g html-minifier-terser || { echo -e "${RED}Error al instalar html-minifier-terser.${NC}"; exit 1; }
-npm list -g csso-cli >/dev/null 2>&1 || npm install -g csso-cli || { echo -e "${RED}Error al instalar csso-cli.${NC}"; exit 1; }
-npm list -g uglify-js >/dev/null 2>&1 || npm install -g uglify-js || { echo -e "${RED}Error al instalar uglify-js.${NC}"; exit 1; }
-echo -e "${GREEN}Herramientas de minificación instaladas correctamente.${NC}"
-
-
+# Mostrar mensaje de finalización
 echo -e "${GREEN}Instalación y configuración completadas.${NC}"
