@@ -177,4 +177,44 @@ Estas herramientas están diseñadas para facilitar tareas comunes en el desarro
 
 **Descripción**: Este proyecto permite extraer datos de tablas en un documento HTML, incluyendo los vínculos presentes en las celdas de las tablas. Los datos extraídos se muestran en formato JSON y pueden copiarse al portapapeles.
 
-- **Prueba el extractor de datos**: [Enlace al extractor de datos](https://github.com/andres-olarte396/dev-laoz-table-to-json)
+- **Míralo en GitHub**: [Enlace al extractor de datos](https://github.com/andres-olarte396/dev-laoz-table-to-json)
+
+### 22. Calculadora de datos
+
+**Descripción**: Este proyecto es una página web simple que permite realizar las siguientes operaciones relacionadas con datos y velocidad
+
+  1. Conversión entre unidades de almacenamiento de datos: (Bytes, KB, MB, GB, TB).
+  2. Conversión entre unidades de velocidad de datos: (bps, Kbps, Mbps, Gbps).
+  3. Cálculo del tiempo de descarga: según el tamaño del archivo y la velocidad de descarga.
+
+- **Míralo en GitHub**: [Enlace a la calculadora de datos](https://github.com/andres-olarte396/dev-laoz-DataCalculator)
+
+### 23. Proyecto base de HTML
+
+**Descripción**: Esta plantilla es un proyecto básico en HTML, CSS y JavaScript que puede usarse como punto de partida para cualquier proyecto web. Incluye una estructura mínima pero funcional que se puede personalizar según las necesidades del usuario.
+
+- **Míralo en GitHub**: [Enlace al proyecto base de HTML](https://github.com/andres-olarte396/dev-laoz-HTML-Project-Base)
+
+### 24. Biblioteca base de CSS
+
+**Descripción**: Un proyecto modular diseñado para facilitar la creación de interfaces de usuario modernas, altamente responsivas, accesibles y personalizables. Este proyecto implementa las últimas tendencias en CSS, incluyendo CSS Grid, Flexbox, Consultas de Contenedores, Temas Oscuros y Claros, y muchas más herramientas avanzadas.
+
+- **Prueba tus estilos aquí**: [Enlace al proyecto base de CSS](https://github.com/andres-olarte396/dev-laoz-WaveArtCSS)
+
+### 25. Slider de Imágenes Dinámico
+
+**Descripción**: Este proyecto es un slider de imágenes dinámico construido con HTML, CSS y JavaScript. Permite a los usuarios navegar a través de una serie de imágenes con controles de navegación.
+
+- **Míralo en GitHub**: [Enlace al proyecto visor de Imágenes](https://github.com/andres-olarte396/dev-laoz-image-viwer)
+
+### 26. Simulador de Velocidad de Red
+
+**Descripción**: Una herramienta poderosa que te permite simular diversas condiciones de red, como velocidad, latencia y pérdida de paquetes. Este simulador es ideal para desarrolladores, ingenieros de QA y entusiastas de redes que deseen probar cómo funcionan sitios web o aplicaciones bajo diferentes escenarios de red.
+
+- **Míralo en GitHub**: [Enlace al proyecto simulador de velocidad de red](https://github.com/andres-olarte396/dev-laoz-network-latency-simulator)
+
+### 27. Visor de Markdown
+
+**Descripción**: Una aplicación web simple e interactiva que permite a los usuarios escribir, editar y visualizar texto en formato Markdown en tiempo real. Es perfecta para aprender y practicar Markdown de manera intuitiva.
+
+- **Míralo en GitHub**: [Enlace al proyecto visor de markdown](https://github.com/andres-olarte396/dev-laoz-markdown-viwer)
