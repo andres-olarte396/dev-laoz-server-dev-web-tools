@@ -2,7 +2,7 @@
 
 En el mundo del desarrollo web, contar con herramientas eficientes puede marcar la diferencia en la productividad y en la calidad del trabajo final. En este artículo, un servidor equipado con una serie de herramientas que he desarrollado y que pueden facilitar diversas tareas cotidianas.
 
-## Prerequisitos
+## Pre-requisitos
 
 Antes de comenzar, asegúrate de tener instalados los siguientes programas:
 
