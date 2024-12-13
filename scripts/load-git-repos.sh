@@ -14,7 +14,7 @@ echo -e "${GREEN}Instalación de Git y OpenSSH completada.${NC}"
 mkdir -p /vagrant/keys
 
 chmod 600 /vagrant/keys/id_ed25519
-chmod 600 /vagrant/keys/id_ed25519.pub
+chmod 644 /vagrant/keys/id_ed25519.pub
 
 # Rutas de las claves SSH
 ssh_key="/vagrant/keys/id_ed25519"
@@ -131,7 +131,7 @@ for repo in "${repos[@]}"; do
     
     # Verificar si el repositorio ya está clonado
     if [ -d "$repo_path" ]; then
-        echo -e "${RED}El directorio destino $repo_path ya existe. Eliminando...${NC}"
+        echo -e "${RED}El directorio destino $repo_path ya existe. Eliminando version previa...${NC}"
         rm -rf "$repo_path" || { echo -e "${RED}Error al eliminar el directorio $repo_path.${NC}"; exit 1; }
         echo "Directorio eliminado: $repo_path."
     fi 
@@ -147,7 +147,7 @@ for repo in "${repos[@]}"; do
     # Instalar dependencias de Node.js en el proyecto
     if [ -f "$repo_path/package.json" ]; then
         echo -e "${GREEN}Instalando dependencias de Node.js en el proyecto...${NC}"
-        cd /vagrant
+        cd "$repo_path"
         npm install || { echo -e "${RED}Error al instalar dependencias del proyecto.${NC}"; exit 1; }
     else
         echo -e "${RED}No se encontró el archivo package.json en $repo_path. Saltando la instalación de dependencias.${NC}"

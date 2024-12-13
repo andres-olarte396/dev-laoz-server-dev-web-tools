@@ -43,18 +43,14 @@ done
 echo -e "${GREEN}Todos los archivos del directorio: $PROJECT_DIR se han limpiado y minificado.${NC}"
 
 # Eliminar archivos y carpetas innecesarios
-echo "Eliminando archivos y carpetas innecesarios del directorio: $PROJECT_DIR ..."
+echo "Eliminando archivos y directorios asociados a Git: $PROJECT_DIR ..."
 
 # Eliminar archivos .gitignore
 echo "Eliminando archivos .gitignore..."
 find "$PROJECT_DIR" -name "*.gitignore" -type f -exec rm -f {} +
 
-# Eliminar archivos .md
-echo "Eliminando archivos .md..."
-find "$PROJECT_DIR" -name "*.md" -type f -exec rm -f {} +
-
 # Eliminar la carpeta .git completa
-echo "Eliminando carpetas .git..."
+echo "Eliminando directorio .git..."
 find "$PROJECT_DIR" -name ".git" -type d -exec rm -rf {} +
 
 echo "Archivos y carpetas innecesarios eliminados del directorio: $PROJECT_DIR."
