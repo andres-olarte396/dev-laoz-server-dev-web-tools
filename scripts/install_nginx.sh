@@ -1,27 +1,24 @@
 #!/bin/bash
 
-# Definimos colores para los mensajes
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-NC='\033[0m' # Sin color
+source ./messages.sh
 
-echo -e "${GREEN}Inicio del proceso de instalación o actualización de Nginx.${NC}"
+msg_success "Inicio del proceso de instalación o actualización de Nginx."
 
 # Verificar si Nginx está instalado
 if dpkg -l | grep -q nginx; then
-    echo -e "${GREEN}Nginx ya está instalado. Verificando actualizaciones...${NC}"
-    apt-get install --only-upgrade -y nginx || { echo -e "${RED}Error al actualizar Nginx.${NC}"; exit 1; }
+    msg_success "Nginx ya está instalado. Verificando actualizaciones..."
+    apt-get install --only-upgrade -y nginx || { msg_success "Error al actualizar Nginx."; exit 1; }
 else
-    echo -e "${GREEN}Nginx no está instalado. Procediendo con la instalación...${NC}"
-    apt-get install -y nginx || { echo -e "${RED}Error al instalar Nginx.${NC}"; exit 1; }
+    msg_success "Nginx no está instalado. Procediendo con la instalación..."
+    apt-get install -y nginx || { msg_success "Error al instalar Nginx."; exit 1; }
 fi
 
 # Configurar Nginx para servir PHP solo si no está configurado
 nginx_config="/etc/nginx/sites-available/default"
 if grep -q "fastcgi_pass" "$nginx_config"; then
-    echo -e "${GREEN}La configuración de Nginx para PHP ya existe. No se realizan cambios.${NC}"
+    msg_success "La configuración de Nginx para PHP ya existe. No se realizan cambios."
 else
-    echo -e "${GREEN}Creando configuración de Nginx para servir PHP...${NC}"
+    msg_success "Creando configuración de Nginx para servir PHP..."
     cat > "$nginx_config" << EOF
 server {
     listen 80 default_server;
@@ -48,13 +45,13 @@ server {
 EOF
 
     # Reiniciar Nginx para aplicar cambios
-    echo -e "${GREEN}Reiniciando Nginx para aplicar cambios...${NC}"
-    systemctl restart nginx || { echo -e "${RED}Error al reiniciar Nginx.${NC}"; exit 1; }
+    msg_success "Reiniciando Nginx para aplicar cambios..."
+    systemctl restart nginx || { msg_success "Error al reiniciar Nginx."; exit 1; }
 fi
 
 # Habilitar y asegurar que Nginx está en ejecución
-echo -e "${GREEN}Asegurando que Nginx está habilitado y en ejecución...${NC}"
-systemctl enable nginx || { echo -e "${RED}Error al habilitar Nginx.${NC}"; exit 1; }
-systemctl start nginx || { echo -e "${RED}Error al iniciar Nginx.${NC}"; exit 1; }
+msg_success "Asegurando que Nginx está habilitado y en ejecución..."
+systemctl enable nginx || { msg_success "Error al habilitar Nginx."; exit 1; }
+systemctl start nginx || { msg_success "Error al iniciar Nginx."; exit 1; }
 
-echo -e "${GREEN}El servidor web NGINX está listo para usarse: http://localhost/index.php ${NC}"
+msg_success "El servidor web NGINX está listo para usarse: http://localhost/index.php "
