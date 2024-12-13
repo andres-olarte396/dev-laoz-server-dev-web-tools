@@ -1,5 +1,4 @@
 #!/bin/bash
-
 source ./messages.sh
 
 # Actualizamos los paquetes

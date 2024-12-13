@@ -1,5 +1,4 @@
 #!/bin/bash
-
 source ./messages.sh
 
 msg_success "Inicio del proceso de instalación o actualización de Nginx."

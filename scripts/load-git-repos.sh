@@ -1,5 +1,4 @@
 #!/bin/bash
-
 source ./messages.sh
 
 # Instalar Git y OpenSSH si no están instalados
