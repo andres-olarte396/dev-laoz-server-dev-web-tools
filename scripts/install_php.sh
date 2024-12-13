@@ -1,5 +1,5 @@
 #!/bin/bash
-source ./messages.sh
+source /vagrant/scripts/messages.sh
 
 msg_success "Inicio del proceso de instalación de php. ."
 

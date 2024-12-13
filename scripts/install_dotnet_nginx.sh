@@ -1,37 +1,37 @@
 #!/bin/bash
-source ./messages.sh
+source /vagrant/scripts/messages.sh
 
 # Actualizar los paquetes del sistema
 msg_success "Actualizando paquetes del sistema..."
-sudo apt-get update -y && sudo apt-get upgrade -y || { msg_success "Error al actualizar los paquetes."; exit 1; }
+sudo apt-get update -y && sudo apt-get upgrade -y || { msg_error "Error al actualizar los paquetes."; exit 1; }
 
 # Instalar dependencias requeridas
 msg_success "Instalando dependencias..."
-sudo apt-get install -y wget apt-transport-https software-properties-common || { msg_success "Error al instalar dependencias."; exit 1; }
+sudo apt-get install -y wget apt-transport-https software-properties-common || { msg_error "Error al instalar dependencias."; exit 1; }
 
 # Agregar el repositorio de Microsoft para .NET
 msg_success "Agregando el repositorio de Microsoft para .NET..."
-wget https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb -O packages-microsoft-prod.deb || { msg_success "Error al descargar el repositorio de Microsoft."; exit 1; }
-sudo dpkg -i packages-microsoft-prod.deb || { msg_success "Error al configurar el repositorio de Microsoft."; exit 1; }
+wget https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb -O packages-microsoft-prod.deb || { msg_error "Error al descargar el repositorio de Microsoft."; exit 1; }
+sudo dpkg -i packages-microsoft-prod.deb || { msg_error "Error al configurar el repositorio de Microsoft."; exit 1; }
 rm -f packages-microsoft-prod.deb
 
 # Instalar .NET SDK
 msg_success "Instalando .NET SDK..."
 sudo apt-get update -y
-sudo apt-get install -y dotnet-sdk-7.0 || { msg_success "Error al instalar .NET SDK."; exit 1; }
+sudo apt-get install -y dotnet-sdk-7.0 || { msg_error "Error al instalar .NET SDK."; exit 1; }
 
 # Verificar la instalación de .NET
 dotnet_version=$(dotnet --version)
 if [ $? -eq 0 ]; then
     msg_success ".NET SDK instalado correctamente: ${dotnet_version}"
 else
-    msg_success "Error al instalar .NET SDK."
+    msg_error "Error al instalar .NET SDK."
     exit 1
 fi
 
 # Instalar y configurar un servidor web (Nginx)
 msg_success "Instalando y configurando Nginx para hospedar aplicaciones .NET..."
-sudo apt-get install -y nginx || { msg_success "Error al instalar Nginx."; exit 1; }
+sudo apt-get install -y nginx || { msg_error "Error al instalar Nginx."; exit 1; }
 
 # Crear un archivo de configuración para la aplicación .NET
 nginx_config="/etc/nginx/sites-available/dotnet-app"
@@ -56,8 +56,8 @@ EOL
 
 # Habilitar la configuración de Nginx
 sudo ln -s $nginx_config /etc/nginx/sites-enabled/
-sudo nginx -t || { msg_success "Error en la configuración de Nginx."; exit 1; }
-sudo systemctl restart nginx || { msg_success "Error al reiniciar Nginx."; exit 1; }
+sudo nginx -t || { msg_error "Error en la configuración de Nginx."; exit 1; }
+sudo systemctl restart nginx || { msg_error "Error al reiniciar Nginx."; exit 1; }
 
 # Configuración completada
 msg_success "Instalación y configuración completadas:"

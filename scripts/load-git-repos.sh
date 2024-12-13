@@ -1,5 +1,5 @@
 #!/bin/bash
-source ./messages.sh
+source /vagrant/scripts/messages.sh
 
 # Instalar Git y OpenSSH si no están instalados
 apt-get update
@@ -31,13 +31,13 @@ eval "$(ssh-agent -s)"
 
 # Agregar la clave privada al agente SSH
 msg_success "Agregando clave privada al agente"
-ssh-add "$ssh_key" || { msg_success "Error al agregar la clave SSH al agente."; exit 1; }    
+ssh-add "$ssh_key" || { msg_error "Error al agregar la clave SSH al agente."; exit 1; }    
 
 # Verificar que la clave está en el agente
 if ssh-add -l > /dev/null 2>&1; then
     msg_success "Clave SSH agregada al agente correctamente."
 else
-    msg_success "Error: No se pudo agregar la clave SSH al agente."
+    msg_error "Error: No se pudo agregar la clave SSH al agente."
     exit 1
 fi
 
@@ -45,7 +45,7 @@ fi
 if [ -f "$ssh_pub_key" ]; then
     msg_success "Clave pública generada:"
     cat "$ssh_pub_key"
-    msg_success "\nSi no lo has hecho, agrega esta clave a tu cuenta de GitHub en https://github.com/settings/keys"
+    msg_info "Si no lo has hecho, agrega esta clave a tu cuenta de GitHub en https://github.com/settings/keys"
 fi
 
 # Validar autenticación en GitHub
@@ -53,9 +53,9 @@ msg_success "Verificando autenticación con GitHub..."
 if git ls-remote git@github.com: > /dev/null 2>&1; then
     msg_success "Autenticación con GitHub verificada correctamente."
 else
-    msg_success "Error: No se pudo autenticar con GitHub. Asegúrate de haber agregado tu clave SSH a tu cuenta."
+    msg_error "Error: No se pudo autenticar con GitHub. Asegúrate de haber agregado tu clave SSH a tu cuenta."
     # Pausa de 2 minutos para agregar la clave en GitHub
-    msg_success "Pausando por 1 minutos para que tengas tiempo de agregar la clave..."
+    msg_warning "Pausando por 1 minutos para que tengas tiempo de agregar la clave..."
     sleep 60
 fi
 
@@ -78,24 +78,24 @@ index_file="$destination_dir/index.html"
 if [ -f "$index_file_source" ]; then
     # Si el archivo ya existe en el destino, se elimina
     if [ -f "$index_file" ]; then
-        rm -f "$index_file" || { msg_success "Error al eliminar $index_file"; exit 1; }
+        rm -f "$index_file" || { msg_error "Error al eliminar $index_file"; exit 1; }
     fi
 
     # Copiar el archivo desde el directorio de origen al destino
-    cp "$index_file_source" "$index_file" || { msg_success "Error al mover $index_file_source a $index_file"; exit 1; }
+    cp "$index_file_source" "$index_file" || { msg_error "Error al mover $index_file_source a $index_file"; exit 1; }
     msg_info "Archivo movido desde $source_dir a $destination_dir"
 else
-    msg_success "El archivo index.html no existe en el directorio de origen: $source_dir "
+    msg_error "El archivo index.html no existe en el directorio de origen: $source_dir "
 fi
 
-msg_success "Inicio de la descarga y sincronización de proyectos desde Git "
+msg_info "Inicio de la descarga y sincronización de proyectos desde Git "
 
 # Archivo que contiene la lista de repositorios (actualiza la ruta aquí)
 repos_file="/vagrant/scripts/repos.txt"
 
 # Verificar si el archivo de repositorios existe
 if [ ! -f "$repos_file" ]; then
-    msg_success "Error: El archivo $repos_file no existe."
+    msg_error "Error: El archivo $repos_file no existe."
     exit 1
 fi
 
@@ -116,25 +116,25 @@ for repo in "${repos[@]}"; do
     if git ls-remote "$repo" > /dev/null 2>&1; then
         msg_success "Acceso al repositorio $repo verificado."
     else
-        msg_success "Error: No se pudo acceder al repositorio $repo. Verifica la URL y tu clave SSH."
+        msg_error "Error: No se pudo acceder al repositorio $repo. Verifica la URL y tu clave SSH."
         continue # Salta al siguiente repositorio
     fi
 
     repo_name=$(basename "$repo" .git)
     repo_path="/var/www/html/$repo_name"
 
-    msg_success "Procesando el repositorio $repo_name..."
+    msg_info "Procesando el repositorio $repo_name..."
     
     # Verificar si el repositorio ya está clonado
     if [ -d "$repo_path" ]; then
-        msg_success "El directorio destino $repo_path ya existe. Eliminando version previa..."
-        rm -rf "$repo_path" || { msg_success "Error al eliminar el directorio $repo_path."; exit 1; }
-        msg_info "Directorio eliminado: $repo_path."
+        msg_warning "El directorio destino $repo_path ya existe. Eliminando version previa..."
+        rm -rf "$repo_path" || { msg_error "Error al eliminar el directorio $repo_path."; exit 1; }
+        msg_warning "Directorio eliminado: $repo_path."
     fi 
 
     # Clonar el repositorio usando la clave SSH
     msg_info "Clonando el repositorio $repo_name..."
-    git clone "$repo" "$repo_path" || { msg_success "Error al clonar el repositorio $repo."; exit 1; }
+    git clone "$repo" "$repo_path" || { msg_error "Error al clonar el repositorio $repo."; exit 1; }
 
     # Dar permisos de ejecución al script de minificación
     chmod +x /vagrant/scripts/clean_and_minify.sh
@@ -142,11 +142,11 @@ for repo in "${repos[@]}"; do
 
     # Instalar dependencias de Node.js en el proyecto
     if [ -f "$repo_path/package.json" ]; then
-        msg_success "Instalando dependencias de Node.js en el proyecto..."
-        cd "$repo_path"
-        npm install || { msg_success "Error al instalar dependencias del proyecto."; exit 1; }
+        msg_info "Instalando dependencias de Node.js en el proyecto..."
+        cd "$repo_path" || { msg_error "Error al cambiar al directorio $repo_path."; exit 1; }
+        npm install || { msg_error "Error al instalar dependencias del proyecto."; exit 1; }
     else
-        msg_success "No se encontró el archivo package.json en $repo_path. Saltando la instalación de dependencias."
+        msg_warning "No se encontró el archivo package.json en $repo_path. Saltando la instalación de dependencias."
     fi
 done
 

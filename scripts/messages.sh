@@ -10,20 +10,25 @@ NC='\033[0m'          # Sin color
 # Funciones para mensajes
 msg_success() {
     local message=$1
-    echo -e "\n${GREEN}✅ [SUCCESS]: ${message}${NC}"
+    echo -e "${GREEN} ✅ [SUCCESS]: ${message}${NC}"
 }
 
 msg_error() {
     local message=$1
-    echo -e "\n${RED}❌ [ERROR]: ${message}${NC}"
+    echo -e "${RED} ❌ [ERROR]: ${message}${NC}"
 }
 
 msg_info() {
     local message=$1
-    echo -e "\n${BLUE}ℹ️ [INFO]: ${message}${NC}"
+    echo -e "${BLUE} ℹ️ [INFO]: ${message}${NC}"
 }
 
 msg_warning() {
     local message=$1
-    echo -e "\n${YELLOW}⚠️ [WARNING]: ${message}${NC}"
+    echo -e "${YELLOW} ⚠️ [WARNING]: ${message}${NC}"
+}
+
+msg() {
+    local message=$1
+    echo -e "${NC} 📧 ${message}"
 }

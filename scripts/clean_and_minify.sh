@@ -1,5 +1,5 @@
 #!/bin/bash
-source ./messages.sh
+source /vagrant/scripts/messages.sh
 
 # Directorio predeterminado
 DEFAULT_PROJECT_DIR="/var/www/html"
@@ -11,7 +11,7 @@ msg_success "Inicio del proceso de limpieza y minificación de archivos en $PROJ
 
 # Verificar si el directorio existe
 if [ ! -d "$PROJECT_DIR" ]; then
-    msg_success "Error: El directorio $PROJECT_DIR no existe."
+    msg_error "Error: El directorio $PROJECT_DIR no existe."
     exit 1
 fi
 
@@ -39,14 +39,14 @@ done
 msg_success "Todos los archivos del directorio: $PROJECT_DIR se han limpiado y minificado."
 
 # Eliminar archivos y carpetas innecesarios
-msg_info "Eliminando archivos y directorios asociados a Git: $PROJECT_DIR ..."
+msg_warning "Eliminando archivos y directorios asociados a Git: $PROJECT_DIR ..."
 
 # Eliminar archivos .gitignore
-msg_info "Eliminando archivos .gitignore..."
+msg_warning "Eliminando archivos .gitignore..."
 find "$PROJECT_DIR" -name "*.gitignore" -type f -exec rm -f {} +
 
 # Eliminar la carpeta .git completa
-msg_info "Eliminando directorio .git..."
+msg_warning "Eliminando directorio .git..."
 find "$PROJECT_DIR" -name ".git" -type d -exec rm -rf {} +
 
 msg_info "Archivos y carpetas innecesarios eliminados del directorio: $PROJECT_DIR."
