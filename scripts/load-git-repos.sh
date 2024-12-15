@@ -31,7 +31,7 @@ eval "$(ssh-agent -s)"
 
 # Agregar la clave privada al agente SSH
 msg_success "Agregando clave privada al agente"
-ssh-add "$ssh_key" || { msg_error "Error al agregar la clave SSH al agente."; exit 1; }    
+ssh-add "$ssh_key" || { msg_error "Error al agregar la clave SSH al agente."; exit 1; }
 
 # Verificar que la clave está en el agente
 if ssh-add -l > /dev/null 2>&1; then
@@ -54,7 +54,7 @@ if git ls-remote git@github.com: > /dev/null 2>&1; then
     msg_success "Autenticación con GitHub verificada correctamente."
 else
     msg_error "Error: No se pudo autenticar con GitHub. Asegúrate de haber agregado tu clave SSH a tu cuenta."
-    # Pausa de 2 minutos para agregar la clave en GitHub
+    # Pausa de 1 minutos para agregar la clave en GitHub
     msg_warning "Pausando por 1 minutos para que tengas tiempo de agregar la clave..."
     sleep 60
 fi
@@ -88,46 +88,43 @@ else
     msg_error "El archivo index.html no existe en el directorio de origen: $source_dir "
 fi
 
-msg_info "Inicio de la descarga y sincronización de proyectos desde Git "
-
-# Archivo que contiene la lista de repositorios (actualiza la ruta aquí)
-repos_file="/vagrant/scripts/repos.txt"
-
-# Verificar si el archivo de repositorios existe
-if [ ! -f "$repos_file" ]; then
-    msg_error "Error: El archivo $repos_file no existe."
+# Validar que se hayan pasado argumentos
+if [ "$#" -eq 0 ]; then
+    msg_error "Error: No se proporcionaron URLs de repositorios."
     exit 1
 fi
 
-# Leer los repositorios del archivo
-mapfile -t repos < <(cat "$repos_file" | tr -d '\r' | sed 's/^[ \t]*//;s/[ \t]*$//')
+msg_info "Inicio de la descarga y configuración de proyectos..."
 
 # Rama principal por defecto
-main_branch="master"  # Cambia a "main" si es necesario
+main_branch="master"  # Cambiar a "main" si es necesario
 
-# Procesar cada repositorio
-for repo in "${repos[@]}"; do
-    # Continuar si la línea está vacía
+# Procesar los argumentos (URLs) y separar por saltos de línea
+repos=$(echo "$@" | sed 's/default: /\n/g')
+
+# Procesar cada URL de repositorio pasado como argumento
+for repo in $repos; do
+    # Continuar si la URL está vacía
     if [[ -z "$repo" ]]; then
         continue
     fi
 
-    # agrega validación de acceso al repositorio GitHub
+    # Validar acceso al repositorio
     if git ls-remote "$repo" > /dev/null 2>&1; then
         msg_success "Acceso al repositorio $repo verificado."
     else
         msg_error "Error: No se pudo acceder al repositorio $repo. Verifica la URL y tu clave SSH."
-        continue # Salta al siguiente repositorio
+        continue # Saltar al siguiente repositorio
     fi
 
     repo_name=$(basename "$repo" .git)
     repo_path="/var/www/html/$repo_name"
 
     msg_info "Procesando el repositorio $repo_name..."
-    
+
     # Verificar si el repositorio ya está clonado
     if [ -d "$repo_path" ]; then
-        msg_warning "El directorio destino $repo_path ya existe. Eliminando version previa..."
+        msg_warning "El directorio destino $repo_path ya existe. Eliminando versión previa..."
         rm -rf "$repo_path" || { msg_error "Error al eliminar el directorio $repo_path."; exit 1; }
         msg_warning "Directorio eliminado: $repo_path."
     fi 

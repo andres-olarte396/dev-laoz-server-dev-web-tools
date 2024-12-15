@@ -49,6 +49,10 @@ Para iniciar el servidor utilizando Vagrant, sigue estos pasos:
         npm start
     ```
 
+## Configuración
+
+Para modificar la configuracion actual del servidor remitirse al archivo: [configuration](CONFIGURATION.md)
+
 ## Repositorios incluidos en el servidor
 
 Estas herramientas están diseñadas para facilitar tareas comunes en el desarrollo web y pueden ayudar a mejorar tu productividad. Te invito a probar cada una de ellas y ver cómo pueden integrarse en tu flujo de trabajo diario.
