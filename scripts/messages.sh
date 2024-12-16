@@ -30,7 +30,7 @@ msg_info() {
 
 msg_warning() {
     local message=$1
-    echo -e "$(get_current_date): ${YELLOW} ⚠️ [WARNING] ${message}${NC}"
+    echo -e "$(get_current_date): ${YELLOW} ⚠️  [WARNING] ${message}${NC}"
 }
 
 msg() {

@@ -142,6 +142,8 @@ for repo in $repos; do
         msg_info "Instalando dependencias de Node.js en el proyecto..."
         cd "$repo_path" || { msg_error "Error al cambiar al directorio $repo_path."; exit 1; }
         npm install || { msg_error "Error al instalar dependencias del proyecto."; exit 1; }
+        npm start || { msg_error "Error al iniciar el proyecto."; exit 1; }
+        continue    # Saltar al siguiente repositorio
     else
         msg_warning "No se encontró el archivo package.json en $repo_path. Saltando la instalación de dependencias."
     fi
