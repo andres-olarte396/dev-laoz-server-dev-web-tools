@@ -9,11 +9,11 @@ fi
 
 # Procesar según el primer argumento
 case $1 in
-    herramientas)
+    tools)
         # Extraer herramientas marcadas
         grep -E '^\- \[x\]' "$config_file" | grep -i -E 'nginx|nodejs|php|spring|dotnet' | awk '{print tolower($NF)}'
         ;;
-    marcados)
+    repos)
         # Extraer contenido entre paréntesis y separarlo por saltos de línea
         grep -E '^\- \[x\]' "$config_file" | grep -oP '\(.*?\)' | sed 's/[()]//g' | sort -u | tr '\n' '\n'
         ;;

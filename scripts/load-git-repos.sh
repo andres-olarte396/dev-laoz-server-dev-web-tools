@@ -137,15 +137,19 @@ for repo in $repos; do
     chmod +x /vagrant/scripts/clean_and_minify.sh
     bash /vagrant/scripts/clean_and_minify.sh "$repo_path"
 
-    # Instalar dependencias de Node.js en el proyecto
+    # Instalar dependencias de Node.js en el proyecto en un nuevo hilo
     if [ -f "$repo_path/package.json" ]; then
-        msg_info "Instalando dependencias de Node.js en el proyecto..."
-        cd "$repo_path" || { msg_error "Error al cambiar al directorio $repo_path."; exit 1; }
-        npm install || { msg_error "Error al instalar dependencias del proyecto."; exit 1; }
-        npm start || { msg_error "Error al iniciar el proyecto."; exit 1; }
-        continue    # Saltar al siguiente repositorio
-    else
-        msg_warning "No se encontró el archivo package.json en $repo_path. Saltando la instalación de dependencias."
+        msg_info "Instalando dependencias de Node.js en el proyecto en segundo plano..."
+        (
+            cd "$repo_path" || { msg_error "Error al cambiar al directorio $repo_path."; exit 1; }
+            npm install && npm start
+            if [ $? -eq 0 ]; then
+                msg_success "El proyecto en $repo_path inició correctamente."
+            else
+                msg_error "Error al iniciar el proyecto en $repo_path."
+            fi
+        ) &
+        msg_info "La instalación y ejecución del proyecto Node.js continúa en segundo plano."
     fi
 done
 

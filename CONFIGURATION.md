@@ -13,18 +13,23 @@ En esta sección se enumeran las herramientas necesarias para configurar el ento
 
 ### Lista de Instalaciones
 
-- [x] **Instalar Nginx**  
+- [x] **Instalar Nginx**
   _Servidor web liviano y de alto rendimiento para servir aplicaciones web y contenido estático._
-- [x] **Instalar NodeJS**  
+- [x] **Instalar NodeJS**
   _Entorno de ejecución para JavaScript del lado del servidor._
-- [ ] **Instalar PHP**  
+- [ ] **Instalar PHP**
   _Lenguaje de programación para desarrollo de aplicaciones web dinámicas._
-- [ ] **Instalar Spring Boot**  
+- [ ] **Instalar Spring Boot**
   _Framework para construir aplicaciones basadas en Java con facilidad._
-- [ ] **Instalar dotnet Nginx**  
+- [ ] **Instalar dotnet Nginx**
   _Configuración específica para ejecutar aplicaciones .NET en Nginx._
+
+### Utilidades adicionales
+
 - [x] **Minimizar repositorios**  
   _Optimización de las dependencias necesarias para reducir el peso del proyecto._
+- [x] **Eliminar archivos de Git**
+  __
 
 ---
 
@@ -82,9 +87,9 @@ Esta sección lista los repositorios relacionados que se han clonado o necesitan
   _Esta plantilla es un proyecto básico en HTML, CSS y JavaScript que puede usarse como punto de partida para cualquier proyecto web._
 - [x] [**24. Wave Art CSS**](https://github.com/andres-olarte396/dev-laoz-WaveArtCSS)
   _Proyecto modular diseñado para facilitar la creación de interfaces de usuario modernas, altamente responsivas, accesibles y personalizables. Este proyecto implementa las últimas tendencias en CSS._
-- [ ] [**25. Image viwer**](https://github.com/andres-olarte396/dev-laoz-image-viwer)
+- [x] [**25. Image viwer**](https://github.com/andres-olarte396/dev-laoz-image-viwer)
   _Este proyecto es un slider de imágenes dinámico construido con HTML, CSS y JavaScript. Permite a los usuarios navegar a través de una serie de imágenes con controles de navegación._
-- [ ] [**26. Network latency-simulator**](https://github.com/andres-olarte396/dev-laoz-network-latency-simulator)
+- [x] [**26. Network latency-simulator**](https://github.com/andres-olarte396/dev-laoz-network-latency-simulator)
   _Herramienta poderosa que te permite simular diversas condiciones de red, como velocidad, latencia y pérdida de paquetes._
 - [x] [**27. Markdown viwer**](https://github.com/andres-olarte396/dev-laoz-markdown-viwer)
   _Aplicación web simple e interactiva que permite a los usuarios escribir, editar y visualizar texto en formato Markdown en tiempo real._
@@ -114,4 +119,4 @@ Esta sección lista los repositorios relacionados que se han clonado o necesitan
 
 ---
 
-**Última Actualización:** 14 de diciembre de 2024
+**Última Actualización:** 17 de diciembre de 2024
