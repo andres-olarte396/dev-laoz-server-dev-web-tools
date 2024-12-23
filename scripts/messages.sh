@@ -25,7 +25,7 @@ msg_error() {
 
 msg_info() {
     local message=$1
-    echo -e "$(get_current_date): ${BLUE} ℹ️ [INFO] ${message}${NC}"
+    echo -e "$(get_current_date): ${BLUE}  ℹ️ [INFO] ${message}${NC}"
 }
 
 msg_warning() {

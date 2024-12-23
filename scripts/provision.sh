@@ -1,4 +1,5 @@
 #!/bin/bash
+
 source /vagrant/scripts/messages.sh
 
 msg_success " 🎉 Aprovisionando servidor web con herramientas de desarrollo"
