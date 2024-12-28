@@ -29,7 +29,6 @@ En esta sección se enumeran las herramientas necesarias para configurar el ento
 - [x] **Minimizar repositorios**  
   _Optimización de las dependencias necesarias para reducir el peso del proyecto._
 - [x] **Eliminar archivos de Git**
-  __
 
 ---
 
@@ -95,6 +94,18 @@ Esta sección lista los repositorios relacionados que se han clonado o necesitan
   _Aplicación web simple e interactiva que permite a los usuarios escribir, editar y visualizar texto en formato Markdown en tiempo real._
 - [x] [**28. Markdown project**](https://github.com/andres-olarte396/dev-laoz-markdown-project)
   _Este proyecto genera un menú dinámico basado en archivos Markdown (.md) contenidos en un directorio._
+
+- [x] [**29. API Gateway**](https://github.com/andres-olarte396/dev-laoz-api-gateway)
+  _Este proyecto implementa un API Gateway que actúa como punto de entrada central para varios microservicios. El Gateway redirige las solicitudes a los microservicios correspondientes, incluyendo la API de autenticación para gestionar usuarios, roles y permisos._
+
+- [x] [**30. API Autenticación**](https://github.com/andres-olarte396/dev-laoz-authentication-api)
+  _La API de Autenticación permite gestionar la autenticación de usuarios, asignación de roles y permisos. Utiliza JWT (JSON Web Tokens) para la autenticación y MongoDB como base de datos para almacenar los usuarios y sus datos asociados._
+
+- [x] [**31. API Autorización**](https://github.com/andres-olarte396/dev-laoz-authorization-api)
+  _La Authorization API proporciona servicios para validar tokens JWT y verificar los permisos asociados a los usuarios. Es un componente esencial para implementar una arquitectura de microservicios segura._
+
+- [x] [**32. API Usuarios**](https://github.com/andres-olarte396/dev-laoz-api-user)
+  _La API de usuarios proporciona servicios para validar tokens JWT y verificar los permisos asociados a los usuarios. Es un componente esencial para implementar una arquitectura de microservicios segura._
 
 ---
 
