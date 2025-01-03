@@ -9,7 +9,7 @@ Vagrant.configure("2") do |config|
   config.vm.network "private_network", ip: "192.168.56.12"
   # Forward port 80 for HTTP
   config.vm.network "forwarded_port", guest: 80, host: 8080
-  config.vm.network "forwarded_port", guest: 3000, host: 3001
+  config.vm.network "forwarded_port", guest: 3002, host: 3210
   # Set up resources for the virtual machine
   config.vm.provider "virtualbox" do |vb|
     # Nombre de la máquina virtual

@@ -12,23 +12,20 @@ chmod +x /vagrant/scripts/procesar_configuration.sh
 tools=$(bash /vagrant/scripts/procesar_configuration.sh tools)
 repos=$(bash /vagrant/scripts/procesar_configuration.sh repos)
 
-msg_info "Herramientas seleccionadas:\n $tools"
-msg_info "Repositorios seleccionados:\n $repos"
-
 msg_success " 📝 Configuración procesada desde configuration.md"
 
 # Condiciones para la instalación de herramientas
-# if [[ $tools == *"nginx"* ]]; then
+if [[ $tools == *"nginx"* ]]; then
     chmod +x /vagrant/scripts/install_nginx.sh
     bash /vagrant/scripts/install_nginx.sh
     msg_success " ➕ Tecnología instalada: Nginx"
-# fi
+fi
 
-# if [[ $tools == *"nodejs"* ]]; then
+if [[ $tools == *"nodejs"* ]]; then
     chmod +x /vagrant/scripts/install_nodejs.sh
     bash /vagrant/scripts/install_nodejs.sh
     msg_success " ➕ Tecnología instalada: Node.js"
-# fi
+fi
 
 if [[ $tools == *"php"* ]]; then
     chmod +x /vagrant/scripts/install_php.sh
