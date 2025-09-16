@@ -49,6 +49,44 @@ Para iniciar el servidor utilizando Vagrant, sigue estos pasos:
         npm start
     ```
 
+## Mantenimiento del Servidor con Vagrant
+
+Para mantener el servidor en buen estado y asegurar un rendimiento óptimo, se recomienda seguir estos pasos:
+
+1. **Revisar el estado de las máquinas virtuales**  
+
+   Antes de iniciar cualquier trabajo, verifica que las máquinas virtuales estén funcionando correctamente utilizando el comando:
+
+   ```shell
+   vagrant status
+   ```
+
+2. **Actualizar las máquinas virtuales**
+
+    Regularmente, actualiza las máquinas virtuales para asegurarte de que todas las herramientas y dependencias estén al día. Puedes hacerlo con:
+
+    ```shell
+    vagrant reload --provision
+    ```
+
+    Esto reiniciará la máquina virtual y aplicará cualquier cambio en la configuración.
+
+3. **Actualizar el archivo**
+
+   A medida que complete cada instalación o clonado, actualice las marcas (`[x]` o `[ ]`) para mantener el archivo sincronizado con el estado real del proyecto.
+
+4. **Documentar cambios**
+
+   Si agrega nuevas herramientas o repositorios, documente su propósito y estado en este archivo para futuras referencias.
+
+5. **Revisar periódicamente**
+
+   Este archivo debe revisarse y actualizarse regularmente para reflejar cualquier cambio en las necesidades del proyecto o en las herramientas utilizadas.
+
+6. **Compartir con el equipo**
+
+   Asegúrese de que todos los miembros del equipo tengan acceso a este archivo para mantener la coherencia en la configuración del entorno.
+
 ## Configuración
 
 Para modificar la configuracion actual del servidor remitirse al archivo: [configuration](CONFIGURATION.md)
@@ -228,3 +266,11 @@ Estas herramientas están diseñadas para facilitar tareas comunes en el desarro
 **Descripción**: Este proyecto genera un menú dinámico basado en archivos Markdown (.md) contenidos en un directorio.
 
 - **Míralo en GitHub**: [Enlace al proyecto visor de markdown](https://github.com/andres-olarte396/dev-laoz-markdown-project)
+
+## Contribuciones
+
+Si deseas contribuir a este proyecto, no dudes en abrir un issue o enviar un pull request con mejoras o nuevas herramientas que consideres útiles para la comunidad de desarrolladores web.
+
+## Mantenimiento y Actualizaciones
+
+Este servidor y sus herramientas se mantendrán actualizados regularmente para asegurar la compatibilidad con las últimas versiones de software y para incorporar nuevas funcionalidades basadas en las necesidades de los usuarios.

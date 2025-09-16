@@ -9,13 +9,18 @@ Vagrant.configure("2") do |config|
   config.vm.network "private_network", ip: "192.168.56.12"
   # Forward port 80 for HTTP
   config.vm.network "forwarded_port", guest: 80, host: 8080
-  config.vm.network "forwarded_port", guest: 3002, host: 3210
+  # Forward port 443 for HTTPS
+  config.vm.network "forwarded_port", guest: 443, host: 8443
+  # Forward port 3002 for Jupyter
+  config.vm.network "forwarded_port", guest: 3002, host: 3210  
   # Set up resources for the virtual machine
   config.vm.provider "virtualbox" do |vb|
     # Nombre de la máquina virtual
     vb.name = "web-server"
-    vb.memory = 1024/2
-    vb.cpus = 1
+    # Memoria RAM (1/4 de la memoria total del host)
+    vb.memory = 1024
+    # Número de CPUs
+    vb.cpus = 2
   end
   # Provisión para instalar Jupyter y dependencias
   config.vm.provision "shell", path: "scripts/provision.sh"
