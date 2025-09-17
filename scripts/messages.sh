@@ -11,7 +11,6 @@ NC='\033[0m'          # Sin color
 get_current_date() {
     date "+%Y-%m-%d %H:%M:%S"  # Formato: Año-Mes-Día Hora:Minuto:Segundo
 }
-
 # Funciones para mensajes
 msg_success() {
     local message=$1
@@ -25,7 +24,7 @@ msg_error() {
 
 msg_info() {
     local message=$1
-    echo -e "$(get_current_date): ${BLUE}  ℹ️ [INFO] ${message}${NC}"
+    echo -e "$(get_current_date): ${BLUE} ℹ️  [INFO] ${message}${NC}"
 }
 
 msg_warning() {
