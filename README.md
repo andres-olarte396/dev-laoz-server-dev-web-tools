@@ -2,12 +2,53 @@
 
 En el mundo del desarrollo web, contar con herramientas eficientes puede marcar la diferencia en la productividad y en la calidad del trabajo final. En este artículo, un servidor equipado con una serie de herramientas que he desarrollado y que pueden facilitar diversas tareas cotidianas.
 
-## Pre-requisitos
+## 🐳 Opción Recomendada: Docker
 
-Antes de comenzar, asegúrate de tener instalados los siguientes programas:
+### Pre-requisitos
 
-- **Vagrant**: [Descargar Vagrant](https://www.vagrantup.com/downloads)
-- **VirtualBox**: [Descargar VirtualBox](https://www.virtualbox.org/wiki/Downloads)
+- **Docker Desktop** (Windows/Mac) o **Docker Engine** (Linux): [Descargar Docker](https://www.docker.com/get-started)
+- Al menos 4GB de RAM disponible
+
+### Inicio Rápido con Docker
+
+1. **Clonar el repositorio**:
+   ```sh
+   git clone https://github.com/andres-olarte396/dev-laoz-server-dev-web-tools
+   cd dev-laoz-server-dev-web-tools
+   ```
+
+2. **Configurar variables de entorno**:
+   ```sh
+   cp .env.example .env
+   # Edita .env y cambia JWT_SECRET por un valor seguro
+   ```
+
+3. **Iniciar todos los servicios**:
+   ```sh
+   docker-compose up -d
+   ```
+
+4. **Acceder a la aplicación**:
+   - Aplicación Web: http://localhost:8080
+   - API Gateway: http://localhost:3210
+
+5. **Ver logs**:
+   ```sh
+   docker-compose logs -f
+   ```
+
+6. **Detener servicios**:
+   ```sh
+   docker-compose down
+   ```
+
+📖 **Documentación completa**: Ver [DOCKER_SETUP.md](DOCKER_SETUP.md) para instrucciones detalladas, troubleshooting y comandos avanzados.
+
+---
+
+## 📦 Opción Alternativa: Vagrant
+
+### Pre-requisitos
 
 ## Cómo Iniciar el Servidor con Vagrant
 
