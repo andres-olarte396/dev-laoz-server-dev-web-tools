@@ -1,816 +1,1052 @@
 <!DOCTYPE html>
 <html lang="es">
+  <head>
+    <title>Utilidades para Desarrollo Web</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/dev-laoz-WaveArtCSS/src/base.css" />
+    <link rel="stylesheet" href="/dev-laoz-WaveArtCSS/src/components.css" />
+    <link rel="stylesheet" href="/dev-laoz-WaveArtCSS/src/utilities.css" />
+    <link
+      rel="icon"
+      href="/dev-laoz-WaveArtCSS/assets/favicons/favicon.png"
+      type="image/x-icon"
+    />
+    <style>
+      /* Estilos para modal de login y admin */
+      .auth-button {
+        cursor: pointer;
+        padding: 8px 16px;
+        background: #0066cc;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        margin-left: 10px;
+      }
 
-<head>
-  <title>Utilidades para Desarrollo Web</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="../dev-laoz-WaveArtCSS/src/base.css">
-  <link rel="stylesheet" href="../dev-laoz-WaveArtCSS/src/components.css">
-  <link rel="stylesheet" href="../dev-laoz-WaveArtCSS/src/utilities.css">
-  <link rel="icon" href="../dev-laoz-WaveArtCSS/assets/favicons/favicon.png" type="image/x-icon">
-  <style>
-    /* Estilos para modal de login y admin */
-    .auth-button {
-      cursor: pointer;
-      padding: 8px 16px;
-      background: #0066cc;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      margin-left: 10px;
-    }
+      .auth-button:hover {
+        background: #0052a3;
+      }
 
-    .auth-button:hover {
-      background: #0052a3;
-    }
+      .user-info {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        color: #333;
+      }
 
-    .user-info {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      color: #333;
-    }
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+      }
 
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-    }
+      .modal.active {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
 
-    .modal.active {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+      .modal-content {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        max-width: 400px;
+        width: 90%;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
 
-    .modal-content {
-      background: white;
-      padding: 30px;
-      border-radius: 8px;
-      max-width: 400px;
-      width: 90%;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
+      .modal-header {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
 
-    .modal-header {
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 20px;
-    }
+      .form-group {
+        margin-bottom: 15px;
+      }
 
-    .form-group {
-      margin-bottom: 15px;
-    }
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 500;
+      }
 
-    .form-group label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: 500;
-    }
+      .form-group input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+      }
 
-    .form-group input {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 14px;
-    }
+      .error-message {
+        color: #d32f2f;
+        margin-top: 10px;
+        font-size: 14px;
+      }
 
-    .error-message {
-      color: #d32f2f;
-      margin-top: 10px;
-      font-size: 14px;
-    }
+      .success-message {
+        color: #388e3c;
+        margin-top: 10px;
+        font-size: 14px;
+      }
 
-    .success-message {
-      color: #388e3c;
-      margin-top: 10px;
-      font-size: 14px;
-    }
+      .admin-panel {
+        display: none;
+        margin: 30px 0;
+        padding: 20px;
+        background: #f5f5f5;
+        border-radius: 8px;
+      }
 
-    .admin-panel {
-      display: none;
-      margin: 30px 0;
-      padding: 20px;
-      background: #f5f5f5;
-      border-radius: 8px;
-    }
+      .admin-panel.active {
+        display: block;
+      }
 
-    .admin-panel.active {
-      display: block;
-    }
+      .repo-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+      }
 
-    .repo-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 15px;
-    }
+      .repo-table th,
+      .repo-table td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
 
-    .repo-table th,
-    .repo-table td {
-      padding: 12px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
-    }
+      .repo-table th {
+        background: #e0e0e0;
+        font-weight: 600;
+      }
 
-    .repo-table th {
-      background: #e0e0e0;
-      font-weight: 600;
-    }
+      .repo-status {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: bold;
+      }
 
-    .repo-status {
-      display: inline-block;
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 12px;
-      font-weight: bold;
-    }
+      .repo-status.available {
+        background: #c8e6c9;
+        color: #2e7d32;
+      }
 
-    .repo-status.available {
-      background: #c8e6c9;
-      color: #2e7d32;
-    }
+      .repo-status.unavailable {
+        background: #ffcdd2;
+        color: #c62828;
+      }
+    </style>
+  </head>
 
-    .repo-status.unavailable {
-      background: #ffcdd2;
-      color: #c62828;
-    }
-  </style>
-</head>
-
-<body>
-  <header>
-    <img src="../dev-laoz-WaveArtCSS/assets/favicons/favicon.png" alt="Logo de la Compañía"
-      style="width: 50px; height: auto;" />
-    <h1>Utilidades para desarrollo web</h1>
-    <nav aria-label="Main Navigation">
-      <ul>
-        <li><a href="#">Index</a></li>
-        <li><a href="https://github.com/andres-olarte396">github</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-    </nav>
-    <div id="auth-controls" style="position: absolute; top: 20px; right: 20px;">
-      <button id="loginBtn" class="auth-button" onclick="showLoginModal()">Login</button>
-      <div id="userInfo" class="user-info" style="display: none;">
-        <span id="username"></span>
-        <button class="auth-button" onclick="AUTH.logout()">Logout</button>
-      </div>
-    </div>
-  </header>
-  <main>
-    <div class="container">
-      <p>
-        Estas herramientas están diseñadas para facilitar tareas comunes en el
-        desarrollo web y mejorar tu productividad. Explóralas a continuación:
-      </p>
-      <div>
-        <input type="search" id="searchInput" placeholder="Busca una utilidad por nombre o descripción..."
-          onkeyup="filterAccordion()">
-      </div>
-      <div class="accordion">
-        <!-- Item 1 -->
-        <div class="accordion-item">
-          <div class="accordion-header">1. Generador de Código QR</div>
-          <div class="accordion-content">
-            <strong>Descripción:</strong> Una herramienta sencilla para generar
-            códigos QR a partir de una URL o texto. Ideal para compartir enlaces
-            de manera rápida y efectiva.
-            <br>
-            <a href="/dev-laoz-QRcoder/">Prueba el generador de QR</a>
-          </div>
-        </div>
-        <!-- Item 2 -->
-        <div class="accordion-item">
-          <div class="accordion-header">2. Decodificador de Hash</div>
-          <div class="accordion-content">
-            <strong>Descripción:</strong> Decodifica valores hash para verificar
-            contenido original, compatible con varios algoritmos comunes.
-            <br>
-            <a href=" /dev-laoz-HashGenerator/">Prueba el generador de Hash</a>
-          </div>
-        </div>
-        <!-- Item 3 -->
-        <div class="accordion-item">
-          <div class="accordion-header">3. Selector de Iconos</div>
-          <div class="accordion-content">
-            <strong>Descripción:</strong> Un buscador para encontrar rápidamente
-            iconos de Font Awesome o Material Icons. Genera el HTML necesario
-            para integrarlos en tus proyectos.
-            <br>
-            <a href=" /dev-laoz-IconSelector/">Accede al selector de iconos</a>
-          </div>
-        </div>
-        <!-- Item 4 -->
-        <div class="accordion-item">
-          <div class="accordion-header">4. Codificación y Decodificación de URI</div>
-          <div class="accordion-content">
-            <strong>Descripción:</strong> Una herramienta para codificar y
-            decodificar URLs, útil para trabajar con parámetros de manera
-            segura.
-            <br>
-            <a href="/dev-laoz-URIComponent/">Visita la herramienta</a>
-          </div>
-        </div>
-        <!-- Item 5 -->
-        <div class="accordion-item">
-          <div class="accordion-header">5. Conversor de Color</div>
-          <div class="accordion-content">
-            <strong>Descripción:</strong> Convierte colores entre formatos HEX y
-            RGB/HSLA. Incluye una paleta de colores que muestra combinaciones
-            útiles.
-            <br>
-            <a href="/dev-laoz-ConversorHEX-RGB/">Utiliza el conversor de color</a>
-          </div>
-        </div>
-        <!-- Item 6 -->
-        <div class="accordion-item">
-          <div class="accordion-header">6. Generador de Slugs</div>
-          <div class="accordion-content">
-            <strong>Descripción:</strong> Convierte texto en slugs (URLs
-            amigables), ideal para crear rutas limpias para blogs o sitios web.
-            <br>
-            <a href="/dev-laoz-SlugGenerator/">Genera slugs aquí</a>
-          </div>
-        </div>
-        <!-- Item 7 -->
-        <div class="accordion-item">
-          <div class="accordion-header">7. Generador de Contraseñas Seguras</div>
-          <div class="accordion-content">
-            <strong>Descripción:</strong> Crea contraseñas robustas con opciones
-            de longitud y tipos de caracteres, asegurando la seguridad de tus
-            cuentas.
-            <br>
-            <a href="/dev-laoz-PassGenerator/">Empieza a generar contraseñas</a>
-          </div>
-        </div>
-        <!-- Item 8 -->
-        <div class="accordion-item">
-          <div class="accordion-header">8. Decodificador de JWT</div>
-          <div class="accordion-content">
-            <strong>Descripción:</strong> Decodifica JSON Web Tokens para
-            inspeccionar su contenido sin necesidad de la clave privada.
-            <br>
-            <a href="/dev-laoz-JWTDecoder/">Decodifica aquí</a>
-          </div>
-        </div>
-        <!-- Item 9 -->
-        <div class="accordion-item">
-          <div class="accordion-header">9. Buscador de Emojis</div>
-          <div class="accordion-content">
-            <strong>Descripción:</strong> Encuentra rápidamente el emoji
-            adecuado a partir de un archivo JSON con todos los emojis de Git.
-            Útil para proyectos web que necesitan íconos o visuales de emojis.
-            <br>
-            <a href="/dev-laoz-EmojiSearch/">Prueba el buscador de emojis</a>
-          </div>
-        </div>
-        <!-- Item 10 -->
-        <div class="accordion-item">
-          <div class="accordion-header">10. Codificador/Decodificador Base64</div>
-          <div class="accordion-content">
-            <strong>Descripción:</strong> Una herramienta para codificar y
-            decodificar texto en formato Base64, útil para tareas como la
-            transmisión de datos binarios en formato de texto.
-            <br>
-            <a href="/dev-laoz-B64coder/">Prueba la herramienta</a>
-          </div>
-        </div>
-        <!-- Item 11 -->
-        <div class="accordion-item">
-          <div class="accordion-header">11. Generador de Lorem Ipsum Personalizado</div>
-          <div class="accordion-content">
-            <strong>Descripción</strong>: Un generador de texto aleatorio que
-            permite crear "dummy text" en diferentes longitudes y estilos para
-            simular contenido en proyectos.
-            <br>
-            <a href="/dev-laoz-CustomLoremIpsum/">Genera texto Lorem Ipsum</a>
-          </div>
-        </div>
-        <!-- Item 12 -->
-        <div class="accordion-item">
-          <div class="accordion-header">12. Conversor de JSON a YAML / YAML a JSON</div>
-          <div class="accordion-content">
-            <strong>Descripción</strong>: Una herramienta que convierte entre
-            formatos JSON y YAML, útil para proyectos con archivos de
-            configuración (Kubernetes, Docker Compose).
-            <br>
-            <a href="/dev-laoz-JSON-YAML/">Conversor de JSON/YAML</a>
-          </div>
-        </div>
-        <!-- Item 13 -->
-        <div class="accordion-item">
-          <div class="accordion-header">13. Conversor de Unidades (px, rem, em, % para CSS)</div>
-          <div class="accordion-content">
-            <strong>Descripción:</strong> Convierte unidades de medida CSS
-            <br>
-            <a href="/dev-laoz-CSSUnitConversor/">Prueba el conversor de unidades</a>
-          </div>
-        </div>
-        <!-- Item 14 -->
-        <div class="accordion-item">
-          <div class="accordion-header">14. Expresiones Regulares Tester</div>
-          <div class="accordion-content">
-            <strong>Descripción</strong>: Una herramienta para escribir, probar
-            y verificar expresiones regulares en tiempo real, ayudando a ajustar
-            las expresiones según sea necesario.
-            <br>
-            <a href="/dev-laoz-RegexTester/">Prueba el tester de expresiones regulares</a>
-          </div>
-        </div>
-        <!-- Item 15 -->
-        <div class="accordion-item">
-          <div class="accordion-header">15. Conversor de Tiempo Unix</div>
-          <div class="accordion-content">
-            <strong>Descripción</strong>: Una utilidad que convierte timestamps
-            Unix a una fecha legible y viceversa, útil para depuración o
-            manipulación de datos.
-            <br>
-            <a href="/dev-laoz-TimeUnixConversor/">Prueba el conversor de tiempo Unix</a>
-          </div>
-        </div>
-        <!-- Item 16 -->
-        <div class="accordion-item">
-          <div class="accordion-header">16. Minificador de JavaScript y CSS</div>
-          <div class="accordion-content">
-            <strong>Descripción</strong>: Herramientas para minificar y
-            desminificar archivos CSS y JavaScript, mejorando el rendimiento o
-            facilitando el análisis de archivos.
-            <br>
-            <a href="/dev-laoz-Minificador-JS-CSS/">Prueba el minificador de JavaScript y CSS</a>
-          </div>
-        </div>
-        <!-- Item 17 -->
-        <div class="accordion-item">
-          <div class="accordion-header">17. Validación de JSON y XML</div>
-          <div class="accordion-content">
-            <strong>Descripción</strong>: Un validador rápido para estructuras
-            JSON o XML, útil cuando trabajas con APIs o archivos de
-            configuración.
-            <br>
-            <a href="/dev-laoz-XML-JSON-Validator/">Prueba el validador de JSON y XML</a>
-          </div>
-        </div>
-        <!-- Item 18 -->
-        <div class="accordion-item">
-          <div class="accordion-header">18. Conversor de Monedas</div>
-          <div class="accordion-content">
-            <strong>Descripción</strong>: Una herramienta sencilla para
-            convertir entre diferentes tipos de cambio usando APIs públicas,
-            ideal para proyectos que requieren manejar monedas.
-            <br>
-            <a href="/dev-laoz-CurrencyConversor/">Utiliza el conversor de monedas</a>
-          </div>
-        </div>
-        <!-- Item 19 -->
-        <div class="accordion-item">
-          <div class="accordion-header">19. Buscador de Emojis de Git</div>
-          <div class="accordion-content">
-            <strong>Descripción</strong>: Encuentra rápidamente el emoji de Git
-            adecuado a partir de un archivo JSON con todos los emojis de Git.
-            Útil para proyectos web que necesitan íconos o visuales de emojis.
-            <br>
-            <a href="/dev-laoz-gitmojis/">Busca tus emojis para Git aquí</a>
-          </div>
-        </div>
-        <!-- Item 20 -->
-        <div class="accordion-item">
-          <div class="accordion-header">20. Conversor de Unidades numéricas</div>
-          <div class="accordion-content">
-            <strong>Descripción</strong>: Esta aplicación web permite convertir
-            números entre diferentes sistemas de numeración de forma rápida y
-            sencilla. Soporta varias bases, incluyendo binario, decimal, octal,
-            hexadecimal, ternario, quintal, vigesimal y BCD. Con solo ingresar
-            un número en cualquier sistema, puedes ver automáticamente su
-            equivalente en los demás, lo que facilita el aprendizaje y la
-            comprensión de diferentes sistemas numéricos.
-            <br>
-            <a href="/dev-laoz-UnitConversor/">Prueba el conversor de sistemas de numeración</a>
-          </div>
-        </div>
-        <!-- Item 21 -->
-        <div class="accordion-item">
-          <div class="accordion-header">21. Enlace al extractor de datos</div>
-          <div class="accordion-content">
-            <strong>Descripción</strong>: Este proyecto permite extraer datos de
-            tablas en un documento HTML, incluyendo los vínculos presentes en
-            las celdas de las tablas. Los datos extraídos se muestran en formato
-            JSON y pueden copiarse al portapapeles.
-            <br>
-            <a href="/dev-laoz-table-to-json/">Extrae los datos de las tablas HTML aquí</a>
-          </div>
-        </div>
-        <!-- Item 22 -->
-        <div class="accordion-item">
-          <div class="accordion-header">22. Calculadora de datos</div>
-          <div class="accordion-content">
-            <strong>Descripción</strong>: Este proyecto es una página web simple que permite realizar las siguientes
-            operaciones relacionadas con datos y velocidad
-            <br>
-            <a href="/dev-laoz-DataCalculator/">
-              Enlace a la calculadora de datos
-            </a>
-          </div>
-        </div>
-        <!-- Item 23 -->
-        <div class="accordion-item">
-          <div class="accordion-header">23. Proyecto base de HTML</div>
-          <div class="accordion-content">
-            <strong>Descripción:</strong> Esta plantilla es un proyecto básico en HTML, CSS y JavaScript que puede
-            usarse como punto de partida para cualquier proyecto web. Incluye una estructura mínima pero funcional que
-            se puede personalizar según las necesidades del usuario.
-            <br>
-            <a href="/dev-laoz-DataCalculator/">
-              Utiliza el conversor de unidades de datos
-            </a>
-          </div>
-        </div>
-        <!-- Item 24 -->
-        <div class="accordion-item">
-          <div class="accordion-header">24. Biblioteca base de CSS</div>
-          <div class="accordion-content">
-            <strong>Descripción:</strong> Un proyecto modular diseñado para facilitar la creación de interfaces de
-            usuario modernas, altamente responsivas, accesibles y personalizables. Este proyecto implementa las últimas
-            tendencias en CSS, incluyendo CSS Grid, Flexbox, Consultas de Contenedores, Temas Oscuros y Claros, y muchas
-            más herramientas avanzadas.
-            <br>
-            <a href="/dev-laoz-WaveArtCSS/examples/base.html">Prueba el simulador</a>
-          </div>
-        </div>
-        <!-- Item 25 -->
-        <div class="accordion-item">
-          <div class="accordion-header">25. Slider de Imágenes Dinámico</div>
-          <div class="accordion-content">
-            <strong>Descripción:</strong> Genera checksums para validar la integridad de archivos y datos usando MD5,
-            SHA-1, y más.
-            <br>
-            <a href="/dev-laoz-image-viwer/">Prueba el visor de imágenes</a>
-          </div>
-        </div>
-        <!-- Item 26 -->
-        <div class="accordion-item">
-          <div class="accordion-header">26. Simulador de Velocidad de Red</div>
-          <div class="accordion-content">
-            <strong>Descripción:</strong> Una herramienta poderosa que te permite simular diversas condiciones de red,
-            como velocidad, latencia y pérdida de paquetes. Este simulador es ideal para desarrolladores, ingenieros de
-            QA y entusiastas de redes que deseen probar cómo funcionan sitios web o aplicaciones bajo diferentes
-            escenarios de red.
-            <br>
-            <a href="/dev-laoz-network-latency-simulator/">Simula tu red aquí</a>
-          </div>
-        </div>
-        <!-- Item 27 -->
-        <div class="accordion-item">
-          <div class="accordion-header">27. Visor de Markdown</div>
-          <div class="accordion-content">
-            <strong>Descripción:</strong> Una aplicación web simple e interactiva que permite a los usuarios escribir,
-            editar y visualizar texto en formato Markdown en tiempo real. Es perfecta para aprender y practicar Markdown
-            de manera intuitiva.
-            <br>
-            <a href="/dev-laoz-markdown-viwer/">Prueba el visor aquí</a>
-          </div>
-        </div>
-        <!-- Item 28 -->
-        <div class="accordion-item">
-          <div class="accordion-header">28. Markdown project</div>
-          <div class="accordion-content">
-            <strong>Descripción:</strong> Este proyecto genera un menú dinámico basado en archivos Markdown (.md)
-            contenidos en un directorio.
-            <br>
-            <a href="/dev-laoz-markdown-project/">Utiliza el conversor</a>
-          </div>
-        </div>
-        <!-- Item 29 -->
-        <div class="accordion-item">
-          <div class="accordion-header">29. Generador de Nombres Aleatorios</div>
-          <div class="accordion-content">
-            <strong>Descripción:</strong> Crea nombres de usuario o personas
-            ficticias de manera aleatoria para pruebas o juegos.
-            <br>
-            <a href="/dev-laoz-RandomName/">Genera nombres aquí</a>
-          </div>
-        </div>
-        <!-- Item 30 -->
-        <div class="accordion-item">
-          <div class="accordion-header">30. Editor de Texto Markdown</div>
-          <div class="accordion-content">
-            <strong>Descripción:</strong> Un editor que permite escribir y
-            pre-visualizar contenido en formato Markdown.
-            <br>
-            <a href="/dev-laoz-MarkdownEditor/">Prueba el editor</a>
-          </div>
-        </div>
-        <!-- Item 31 -->
-        <div class="accordion-item">
-          <div class="accordion-header">31. Creador de Tablas HTML</div>
-          <div class="accordion-content">
-            <strong>Descripción:</strong> Genera tablas HTML personalizables
-            para incluir en tus proyectos web.
-            <br>
-            <a href="/dev-laoz-HTMLTableGenerator/">Genera tablas HTML aquí</a>
-          </div>
-        </div>
-        <!-- Item 32 -->
-        <div class="accordion-item">
-          <div class="accordion-header">32. Conversor de unidades de datos (Bytes, KB, MB, GB, TB)</div>
-          <div class="accordion-content">
-            <strong>Descripción:</strong> Permite realizar las siguientes
-            operaciones relacionadas con datos y velocidad:
-            <ul>
-              <li>
-                Conversión entre unidades de almacenamiento de datos (Bytes, KB,
-                MB, GB, TB).
-              </li>
-              <li>
-                Conversión entre unidades de velocidad de datos (bps, Kbps, Mbps, Gbps).
-              </li>
-              <li>
-                Cálculo del tiempo de descarga según el tamaño del archivo y la
-                velocidad de descarga.
-              </li>
-            </ul>
-            <br>
-            <a href="/dev-laoz-DataCalculator/">
-              Utiliza el conversor de unidades de datos
-            </a>
-          </div>
-        </div>
-        <!-- Item 33 -->
-        <div class="accordion-item">
-          <div class="accordion-header">33. Simulador de Latencia de Red</div>
-          <div class="accordion-content">
-            <strong>Descripción:</strong> Una herramienta para probar aplicaciones simulando diferentes velocidades y
-            latencias de red.
-            <br>
-            <a href="/dev-laoz-network-latency-simulator/">Prueba el simulador</a>
-          </div>
-        </div>
-        <!-- Item 34 -->
-        <div class="accordion-item">
-          <div class="accordion-header">34. Calculadora de Checksum</div>
-          <div class="accordion-content">
-            <strong>Descripción:</strong> Genera checksums para validar la integridad de archivos y datos usando MD5,
-            SHA-1, y más.
-            <br>
-            <a href="/dev-laoz-Checksum/">Calcula checksums aquí</a>
-          </div>
-        </div>
-        <!-- Item 35 -->
-        <div class="accordion-item">
-          <div class="accordion-header">35. Generador de Fechas Aleatorias</div>
-          <div class="accordion-content">
-            <strong>Descripción:</strong> Genera fechas aleatorias dentro de un
-            rango específico. Útil para pruebas de datos.
-            <br>
-            <a href="/dev-laoz-RandomDate/">Genera fechas aquí</a>
-          </div>
-        </div>
-        <!-- Item 36 -->
-        <div class="accordion-item">
-          <div class="accordion-header">36. Calculadora de Expresiones Regulares</div>
-          <div class="accordion-content">
-            <strong>Descripción:</strong> Valida y prueba expresiones regulares
-            en tiempo real con datos de ejemplo.
-            <br>
-            <a href="/dev-laoz-RegexCalc/">Prueba la calculadora</a>
-          </div>
-        </div>
-        <!-- Item 37 -->
-        <div class="accordion-item">
-          <div class="accordion-header">37. Conversor de Longitudes</div>
-          <div class="accordion-content">
-            <strong>Descripción:</strong> Convierte unidades de longitud entre
-            metros, pies, pulgadas, y más.
-            <br>
-            <a href="/dev-laoz-LengthConverter/">Utiliza el conversor</a>
-          </div>
+  <body>
+    <header>
+      <img
+        src="/dev-laoz-WaveArtCSS/assets/favicons/favicon.png"
+        alt="Logo de la Compañía"
+        style="width: 50px; height: auto"
+      />
+      <h1>Utilidades para desarrollo web</h1>
+      <nav aria-label="Main Navigation">
+        <ul>
+          <li><a href="#">Index</a></li>
+          <li><a href="https://github.com/andres-olarte396">github</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <div
+        id="auth-controls"
+        style="position: absolute; top: 20px; right: 20px"
+      >
+        <button id="loginBtn" class="auth-button" onclick="showLoginModal()">
+          Login
+        </button>
+        <div id="userInfo" class="user-info" style="display: none">
+          <span id="username"></span>
+          <button class="auth-button" onclick="AUTH.logout()">Logout</button>
         </div>
       </div>
-    </div>
-  </main>
-  <footer>
-    <p>© 2024 L40Z Developments. Todos los derechos reservados.</p>
-  </footer>
-
-  <!-- Modal de Login -->
-  <div id="loginModal" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">Iniciar Sesión</div>
-      <form id="loginForm" onsubmit="handleLogin(event)">
-        <div class="form-group">
-          <label for="usernameInput">Usuario:</label>
-          <input type="text" id="usernameInput" required autocomplete="username">
-        </div>
-        <div class="form-group">
-          <label for="passwordInput">Contraseña:</label>
-          <input type="password" id="passwordInput" required autocomplete="current-password">
-        </div>
-        <div id="loginMessage"></div>
-        <button type="submit" class="auth-button" style="width: 100%; margin-top: 15px;">Ingresar</button>
-        <button type="button" class="auth-button" style="width: 100%; margin-top: 10px; background: #757575;"
-          onclick="closeLoginModal()">Cancelar</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Panel de Administración -->
-  <div id="adminPanel" class="admin-panel">
-    <h2>Panel de Administración</h2>
-    <h3>Estado de Repositorios</h3>
-    <table class="repo-table">
-      <thead>
-        <tr>
-          <th>Repositorio</th>
-          <th>Estado</th>
-          <th>Descripción</th>
-        </tr>
-      </thead>
-      <tbody id="repoTableBody">
-        <!-- Se llenará dinámicamente -->
-      </tbody>
-    </table>
-
-    <!-- Sección de Monitor en Tiempo Real -->
-    <div id="monitorSection" style="margin-top: 30px; border-top: 1px solid #ddd; padding-top: 20px;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-        <h3>📡 Monitor en Tiempo Real (Insights)</h3>
+    </header>
+    <main>
+      <div class="container">
+        <p>
+          Estas herramientas están diseñadas para facilitar tareas comunes en el
+          desarrollo web y mejorar tu productividad. Explóralas a continuación:
+        </p>
         <div>
-          <span id="connectionStatus" style="font-size: 12px; margin-right: 10px; color: #666;">Desconectado</span>
-          <button id="toggleMonitorBtn" class="auth-button"
-            style="background: #2e7d32; padding: 6px 12px; font-size: 13px;"
-            onclick="INSIGHTS.toggleStream()">Conectar</button>
+          <input
+            type="search"
+            id="searchInput"
+            placeholder="Busca una utilidad por nombre o descripción..."
+            onkeyup="filterAccordion()"
+          />
+        </div>
+        <div class="accordion">
+          <!-- Item 1 -->
+          <div class="accordion-item">
+            <div class="accordion-header">1. Generador de Código QR</div>
+            <div class="accordion-content">
+              <strong>Descripción:</strong> Una herramienta sencilla para
+              generar códigos QR a partir de una URL o texto. Ideal para
+              compartir enlaces de manera rápida y efectiva.
+              <br />
+              <a href="/dev-laoz-QRcoder/">Prueba el generador de QR</a>
+            </div>
+          </div>
+          <!-- Item 2 -->
+          <div class="accordion-item">
+            <div class="accordion-header">2. Decodificador de Hash</div>
+            <div class="accordion-content">
+              <strong>Descripción:</strong> Decodifica valores hash para
+              verificar contenido original, compatible con varios algoritmos
+              comunes.
+              <br />
+              <a href=" /dev-laoz-HashGenerator/"
+                >Prueba el generador de Hash</a
+              >
+            </div>
+          </div>
+          <!-- Item 3 -->
+          <div class="accordion-item">
+            <div class="accordion-header">3. Selector de Iconos</div>
+            <div class="accordion-content">
+              <strong>Descripción:</strong> Un buscador para encontrar
+              rápidamente iconos de Font Awesome o Material Icons. Genera el
+              HTML necesario para integrarlos en tus proyectos.
+              <br />
+              <a href=" /dev-laoz-IconSelector/"
+                >Accede al selector de iconos</a
+              >
+            </div>
+          </div>
+          <!-- Item 4 -->
+          <div class="accordion-item">
+            <div class="accordion-header">
+              4. Codificación y Decodificación de URI
+            </div>
+            <div class="accordion-content">
+              <strong>Descripción:</strong> Una herramienta para codificar y
+              decodificar URLs, útil para trabajar con parámetros de manera
+              segura.
+              <br />
+              <a href="/dev-laoz-URIComponent/">Visita la herramienta</a>
+            </div>
+          </div>
+          <!-- Item 5 -->
+          <div class="accordion-item">
+            <div class="accordion-header">5. Conversor de Color</div>
+            <div class="accordion-content">
+              <strong>Descripción:</strong> Convierte colores entre formatos HEX
+              y RGB/HSLA. Incluye una paleta de colores que muestra
+              combinaciones útiles.
+              <br />
+              <a href="/dev-laoz-ConversorHEX-RGB/"
+                >Utiliza el conversor de color</a
+              >
+            </div>
+          </div>
+          <!-- Item 6 -->
+          <div class="accordion-item">
+            <div class="accordion-header">6. Generador de Slugs</div>
+            <div class="accordion-content">
+              <strong>Descripción:</strong> Convierte texto en slugs (URLs
+              amigables), ideal para crear rutas limpias para blogs o sitios
+              web.
+              <br />
+              <a href="/dev-laoz-SlugGenerator/">Genera slugs aquí</a>
+            </div>
+          </div>
+          <!-- Item 7 -->
+          <div class="accordion-item">
+            <div class="accordion-header">
+              7. Generador de Contraseñas Seguras
+            </div>
+            <div class="accordion-content">
+              <strong>Descripción:</strong> Crea contraseñas robustas con
+              opciones de longitud y tipos de caracteres, asegurando la
+              seguridad de tus cuentas.
+              <br />
+              <a href="/dev-laoz-PassGenerator/"
+                >Empieza a generar contraseñas</a
+              >
+            </div>
+          </div>
+          <!-- Item 8 -->
+          <div class="accordion-item">
+            <div class="accordion-header">8. Decodificador de JWT</div>
+            <div class="accordion-content">
+              <strong>Descripción:</strong> Decodifica JSON Web Tokens para
+              inspeccionar su contenido sin necesidad de la clave privada.
+              <br />
+              <a href="/dev-laoz-JWTDecoder/">Decodifica aquí</a>
+            </div>
+          </div>
+          <!-- Item 9 -->
+          <div class="accordion-item">
+            <div class="accordion-header">9. Buscador de Emojis</div>
+            <div class="accordion-content">
+              <strong>Descripción:</strong> Encuentra rápidamente el emoji
+              adecuado a partir de un archivo JSON con todos los emojis de Git.
+              Útil para proyectos web que necesitan íconos o visuales de emojis.
+              <br />
+              <a href="/dev-laoz-EmojiSearch/">Prueba el buscador de emojis</a>
+            </div>
+          </div>
+          <!-- Item 10 -->
+          <div class="accordion-item">
+            <div class="accordion-header">
+              10. Codificador/Decodificador Base64
+            </div>
+            <div class="accordion-content">
+              <strong>Descripción:</strong> Una herramienta para codificar y
+              decodificar texto en formato Base64, útil para tareas como la
+              transmisión de datos binarios en formato de texto.
+              <br />
+              <a href="/dev-laoz-B64coder/">Prueba la herramienta</a>
+            </div>
+          </div>
+          <!-- Item 11 -->
+          <div class="accordion-item">
+            <div class="accordion-header">
+              11. Generador de Lorem Ipsum Personalizado
+            </div>
+            <div class="accordion-content">
+              <strong>Descripción</strong>: Un generador de texto aleatorio que
+              permite crear "dummy text" en diferentes longitudes y estilos para
+              simular contenido en proyectos.
+              <br />
+              <a href="/dev-laoz-CustomLoremIpsum/">Genera texto Lorem Ipsum</a>
+            </div>
+          </div>
+          <!-- Item 12 -->
+          <div class="accordion-item">
+            <div class="accordion-header">
+              12. Conversor de JSON a YAML / YAML a JSON
+            </div>
+            <div class="accordion-content">
+              <strong>Descripción</strong>: Una herramienta que convierte entre
+              formatos JSON y YAML, útil para proyectos con archivos de
+              configuración (Kubernetes, Docker Compose).
+              <br />
+              <a href="/dev-laoz-JSON-YAML/">Conversor de JSON/YAML</a>
+            </div>
+          </div>
+          <!-- Item 13 -->
+          <div class="accordion-item">
+            <div class="accordion-header">
+              13. Conversor de Unidades (px, rem, em, % para CSS)
+            </div>
+            <div class="accordion-content">
+              <strong>Descripción:</strong> Convierte unidades de medida CSS
+              <br />
+              <a href="/dev-laoz-CSSUnitConversor/"
+                >Prueba el conversor de unidades</a
+              >
+            </div>
+          </div>
+          <!-- Item 14 -->
+          <div class="accordion-item">
+            <div class="accordion-header">14. Expresiones Regulares Tester</div>
+            <div class="accordion-content">
+              <strong>Descripción</strong>: Una herramienta para escribir,
+              probar y verificar expresiones regulares en tiempo real, ayudando
+              a ajustar las expresiones según sea necesario.
+              <br />
+              <a href="/dev-laoz-RegexTester/"
+                >Prueba el tester de expresiones regulares</a
+              >
+            </div>
+          </div>
+          <!-- Item 15 -->
+          <div class="accordion-item">
+            <div class="accordion-header">15. Conversor de Tiempo Unix</div>
+            <div class="accordion-content">
+              <strong>Descripción</strong>: Una utilidad que convierte
+              timestamps Unix a una fecha legible y viceversa, útil para
+              depuración o manipulación de datos.
+              <br />
+              <a href="/dev-laoz-TimeUnixConversor/"
+                >Prueba el conversor de tiempo Unix</a
+              >
+            </div>
+          </div>
+          <!-- Item 16 -->
+          <div class="accordion-item">
+            <div class="accordion-header">
+              16. Minificador de JavaScript y CSS
+            </div>
+            <div class="accordion-content">
+              <strong>Descripción</strong>: Herramientas para minificar y
+              desminificar archivos CSS y JavaScript, mejorando el rendimiento o
+              facilitando el análisis de archivos.
+              <br />
+              <a href="/dev-laoz-Minificador-JS-CSS/"
+                >Prueba el minificador de JavaScript y CSS</a
+              >
+            </div>
+          </div>
+          <!-- Item 17 -->
+          <div class="accordion-item">
+            <div class="accordion-header">17. Validación de JSON y XML</div>
+            <div class="accordion-content">
+              <strong>Descripción</strong>: Un validador rápido para estructuras
+              JSON o XML, útil cuando trabajas con APIs o archivos de
+              configuración.
+              <br />
+              <a href="/dev-laoz-XML-JSON-Validator/"
+                >Prueba el validador de JSON y XML</a
+              >
+            </div>
+          </div>
+          <!-- Item 18 -->
+          <div class="accordion-item">
+            <div class="accordion-header">18. Conversor de Monedas</div>
+            <div class="accordion-content">
+              <strong>Descripción</strong>: Una herramienta sencilla para
+              convertir entre diferentes tipos de cambio usando APIs públicas,
+              ideal para proyectos que requieren manejar monedas.
+              <br />
+              <a href="/dev-laoz-CurrencyConversor/"
+                >Utiliza el conversor de monedas</a
+              >
+            </div>
+          </div>
+          <!-- Item 19 -->
+          <div class="accordion-item">
+            <div class="accordion-header">19. Buscador de Emojis de Git</div>
+            <div class="accordion-content">
+              <strong>Descripción</strong>: Encuentra rápidamente el emoji de
+              Git adecuado a partir de un archivo JSON con todos los emojis de
+              Git. Útil para proyectos web que necesitan íconos o visuales de
+              emojis.
+              <br />
+              <a href="/dev-laoz-gitmojis/">Busca tus emojis para Git aquí</a>
+            </div>
+          </div>
+          <!-- Item 20 -->
+          <div class="accordion-item">
+            <div class="accordion-header">
+              20. Conversor de Unidades numéricas
+            </div>
+            <div class="accordion-content">
+              <strong>Descripción</strong>: Esta aplicación web permite
+              convertir números entre diferentes sistemas de numeración de forma
+              rápida y sencilla. Soporta varias bases, incluyendo binario,
+              decimal, octal, hexadecimal, ternario, quintal, vigesimal y BCD.
+              Con solo ingresar un número en cualquier sistema, puedes ver
+              automáticamente su equivalente en los demás, lo que facilita el
+              aprendizaje y la comprensión de diferentes sistemas numéricos.
+              <br />
+              <a href="/dev-laoz-UnitConversor/"
+                >Prueba el conversor de sistemas de numeración</a
+              >
+            </div>
+          </div>
+          <!-- Item 21 -->
+          <div class="accordion-item">
+            <div class="accordion-header">21. Enlace al extractor de datos</div>
+            <div class="accordion-content">
+              <strong>Descripción</strong>: Este proyecto permite extraer datos
+              de tablas en un documento HTML, incluyendo los vínculos presentes
+              en las celdas de las tablas. Los datos extraídos se muestran en
+              formato JSON y pueden copiarse al portapapeles.
+              <br />
+              <a href="/dev-laoz-table-to-json/"
+                >Extrae los datos de las tablas HTML aquí</a
+              >
+            </div>
+          </div>
+          <!-- Item 22 -->
+          <div class="accordion-item">
+            <div class="accordion-header">22. Calculadora de datos</div>
+            <div class="accordion-content">
+              <strong>Descripción</strong>: Este proyecto es una página web
+              simple que permite realizar las siguientes operaciones
+              relacionadas con datos y velocidad
+              <br />
+              <a href="/dev-laoz-DataCalculator/">
+                Enlace a la calculadora de datos
+              </a>
+            </div>
+          </div>
+          <!-- Item 23 -->
+          <div class="accordion-item">
+            <div class="accordion-header">23. Proyecto base de HTML</div>
+            <div class="accordion-content">
+              <strong>Descripción:</strong> Esta plantilla es un proyecto básico
+              en HTML, CSS y JavaScript que puede usarse como punto de partida
+              para cualquier proyecto web. Incluye una estructura mínima pero
+              funcional que se puede personalizar según las necesidades del
+              usuario.
+              <br />
+              <a href="/dev-laoz-DataCalculator/">
+                Utiliza el conversor de unidades de datos
+              </a>
+            </div>
+          </div>
+          <!-- Item 24 -->
+          <div class="accordion-item">
+            <div class="accordion-header">24. Biblioteca base de CSS</div>
+            <div class="accordion-content">
+              <strong>Descripción:</strong> Un proyecto modular diseñado para
+              facilitar la creación de interfaces de usuario modernas, altamente
+              responsivas, accesibles y personalizables. Este proyecto
+              implementa las últimas tendencias en CSS, incluyendo CSS Grid,
+              Flexbox, Consultas de Contenedores, Temas Oscuros y Claros, y
+              muchas más herramientas avanzadas.
+              <br />
+              <a href="/dev-laoz-WaveArtCSS/examples/base.html"
+                >Prueba el simulador</a
+              >
+            </div>
+          </div>
+          <!-- Item 25 -->
+          <div class="accordion-item">
+            <div class="accordion-header">25. Slider de Imágenes Dinámico</div>
+            <div class="accordion-content">
+              <strong>Descripción:</strong> Genera checksums para validar la
+              integridad de archivos y datos usando MD5, SHA-1, y más.
+              <br />
+              <a href="/dev-laoz-image-viwer/">Prueba el visor de imágenes</a>
+            </div>
+          </div>
+          <!-- Item 26 -->
+          <div class="accordion-item">
+            <div class="accordion-header">
+              26. Simulador de Velocidad de Red
+            </div>
+            <div class="accordion-content">
+              <strong>Descripción:</strong> Una herramienta poderosa que te
+              permite simular diversas condiciones de red, como velocidad,
+              latencia y pérdida de paquetes. Este simulador es ideal para
+              desarrolladores, ingenieros de QA y entusiastas de redes que
+              deseen probar cómo funcionan sitios web o aplicaciones bajo
+              diferentes escenarios de red.
+              <br />
+              <a href="/dev-laoz-network-latency-simulator/"
+                >Simula tu red aquí</a
+              >
+            </div>
+          </div>
+          <!-- Item 27 -->
+          <div class="accordion-item">
+            <div class="accordion-header">27. Visor de Markdown</div>
+            <div class="accordion-content">
+              <strong>Descripción:</strong> Una aplicación web simple e
+              interactiva que permite a los usuarios escribir, editar y
+              visualizar texto en formato Markdown en tiempo real. Es perfecta
+              para aprender y practicar Markdown de manera intuitiva.
+              <br />
+              <a href="/dev-laoz-markdown-viwer/">Prueba el visor aquí</a>
+            </div>
+          </div>
+          <!-- Item 28 -->
+          <div class="accordion-item">
+            <div class="accordion-header">28. Markdown project</div>
+            <div class="accordion-content">
+              <strong>Descripción:</strong> Este proyecto genera un menú
+              dinámico basado en archivos Markdown (.md) contenidos en un
+              directorio.
+              <br />
+              <a href="/dev-laoz-markdown-project/">Utiliza el conversor</a>
+            </div>
+          </div>
+          <!-- Item 29 -->
+          <div class="accordion-item">
+            <div class="accordion-header">
+              29. Generador de Nombres Aleatorios
+            </div>
+            <div class="accordion-content">
+              <strong>Descripción:</strong> Crea nombres de usuario o personas
+              ficticias de manera aleatoria para pruebas o juegos.
+              <br />
+              <a href="/dev-laoz-RandomName/">Genera nombres aquí</a>
+            </div>
+          </div>
+          <!-- Item 30 -->
+          <div class="accordion-item">
+            <div class="accordion-header">30. Editor de Texto Markdown</div>
+            <div class="accordion-content">
+              <strong>Descripción:</strong> Un editor que permite escribir y
+              pre-visualizar contenido en formato Markdown.
+              <br />
+              <a href="/dev-laoz-MarkdownEditor/">Prueba el editor</a>
+            </div>
+          </div>
+          <!-- Item 31 -->
+          <div class="accordion-item">
+            <div class="accordion-header">31. Creador de Tablas HTML</div>
+            <div class="accordion-content">
+              <strong>Descripción:</strong> Genera tablas HTML personalizables
+              para incluir en tus proyectos web.
+              <br />
+              <a href="/dev-laoz-HTMLTableGenerator/"
+                >Genera tablas HTML aquí</a
+              >
+            </div>
+          </div>
+          <!-- Item 32 -->
+          <div class="accordion-item">
+            <div class="accordion-header">
+              32. Conversor de unidades de datos (Bytes, KB, MB, GB, TB)
+            </div>
+            <div class="accordion-content">
+              <strong>Descripción:</strong> Permite realizar las siguientes
+              operaciones relacionadas con datos y velocidad:
+              <ul>
+                <li>
+                  Conversión entre unidades de almacenamiento de datos (Bytes,
+                  KB, MB, GB, TB).
+                </li>
+                <li>
+                  Conversión entre unidades de velocidad de datos (bps, Kbps,
+                  Mbps, Gbps).
+                </li>
+                <li>
+                  Cálculo del tiempo de descarga según el tamaño del archivo y
+                  la velocidad de descarga.
+                </li>
+              </ul>
+              <br />
+              <a href="/dev-laoz-DataCalculator/">
+                Utiliza el conversor de unidades de datos
+              </a>
+            </div>
+          </div>
+          <!-- Item 33 -->
+          <div class="accordion-item">
+            <div class="accordion-header">33. Simulador de Latencia de Red</div>
+            <div class="accordion-content">
+              <strong>Descripción:</strong> Una herramienta para probar
+              aplicaciones simulando diferentes velocidades y latencias de red.
+              <br />
+              <a href="/dev-laoz-network-latency-simulator/"
+                >Prueba el simulador</a
+              >
+            </div>
+          </div>
+          <!-- Item 34 -->
+          <div class="accordion-item">
+            <div class="accordion-header">34. Calculadora de Checksum</div>
+            <div class="accordion-content">
+              <strong>Descripción:</strong> Genera checksums para validar la
+              integridad de archivos y datos usando MD5, SHA-1, y más.
+              <br />
+              <a href="/dev-laoz-Checksum/">Calcula checksums aquí</a>
+            </div>
+          </div>
+          <!-- Item 35 -->
+          <div class="accordion-item">
+            <div class="accordion-header">
+              35. Generador de Fechas Aleatorias
+            </div>
+            <div class="accordion-content">
+              <strong>Descripción:</strong> Genera fechas aleatorias dentro de
+              un rango específico. Útil para pruebas de datos.
+              <br />
+              <a href="/dev-laoz-RandomDate/">Genera fechas aquí</a>
+            </div>
+          </div>
+          <!-- Item 36 -->
+          <div class="accordion-item">
+            <div class="accordion-header">
+              36. Calculadora de Expresiones Regulares
+            </div>
+            <div class="accordion-content">
+              <strong>Descripción:</strong> Valida y prueba expresiones
+              regulares en tiempo real con datos de ejemplo.
+              <br />
+              <a href="/dev-laoz-RegexCalc/">Prueba la calculadora</a>
+            </div>
+          </div>
+          <!-- Item 37 -->
+          <div class="accordion-item">
+            <div class="accordion-header">37. Conversor de Longitudes</div>
+            <div class="accordion-content">
+              <strong>Descripción:</strong> Convierte unidades de longitud entre
+              metros, pies, pulgadas, y más.
+              <br />
+              <a href="/dev-laoz-LengthConverter/">Utiliza el conversor</a>
+            </div>
+          </div>
         </div>
       </div>
+    </main>
+    <footer>
+      <p>© 2024 L40Z Developments. Todos los derechos reservados.</p>
+    </footer>
 
-      <div id="consoleContainer"
-        style="background: #1e1e1e; color: #bdbdbd; font-family: 'Consolas', 'Monaco', monospace; padding: 15px; border-radius: 6px; height: 350px; overflow-y: auto; font-size: 12px; line-height: 1.4; border: 1px solid #333;">
-        <div style="color: #555; text-align: center; margin-top: 140px;">
-          Presiona "Conectar" para ver los eventos del sistema en vivo...
-        </div>
-      </div>
-      <div style="margin-top: 10px; font-size: 11px; color: #666; display: flex; gap: 15px; justify-content: flex-end;">
-        <span style="display:inline-flex; align-items:center;"><span
-            style="width:8px; height:8px; background:#4caf50; display:inline-block; margin-right:4px; border-radius:50%;"></span>Audit</span>
-        <span style="display:inline-flex; align-items:center;"><span
-            style="width:8px; height:8px; background:#2196f3; display:inline-block; margin-right:4px; border-radius:50%;"></span>Info</span>
-        <span style="display:inline-flex; align-items:center;"><span
-            style="width:8px; height:8px; background:#ff9800; display:inline-block; margin-right:4px; border-radius:50%;"></span>Warn</span>
-        <span style="display:inline-flex; align-items:center;"><span
-            style="width:8px; height:8px; background:#f44336; display:inline-block; margin-right:4px; border-radius:50%;"></span>Error</span>
-        <span style="display:inline-flex; align-items:center;"><span
-            style="width:8px; height:8px; background:#9e9e9e; display:inline-block; margin-right:4px; border-radius:50%;"></span>HTTP</span>
+    <!-- Modal de Login -->
+    <div id="loginModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">Iniciar Sesión</div>
+        <form id="loginForm" onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label for="usernameInput">Usuario:</label>
+            <input
+              type="text"
+              id="usernameInput"
+              required
+              autocomplete="username"
+            />
+          </div>
+          <div class="form-group">
+            <label for="passwordInput">Contraseña:</label>
+            <input
+              type="password"
+              id="passwordInput"
+              required
+              autocomplete="current-password"
+            />
+          </div>
+          <div id="loginMessage"></div>
+          <button
+            type="submit"
+            class="auth-button"
+            style="width: 100%; margin-top: 15px"
+          >
+            Ingresar
+          </button>
+          <button
+            type="button"
+            class="auth-button"
+            style="width: 100%; margin-top: 10px; background: #757575"
+            onclick="closeLoginModal()"
+          >
+            Cancelar
+          </button>
+        </form>
       </div>
     </div>
-  </div>
 
-  <!-- Scripts -->
-  <script src="js/auth.js"></script>
-  <script src="js/insights.js"></script>
-  <script>
-    // JavaScript para controlar el acordeón
-    document.querySelectorAll('.accordion-header').forEach(header => {
-      header.addEventListener('click', () => {
-        const accordionItem = header.parentElement
-        accordionItem.classList.toggle('open')
-      })
-    })
-    function filterAccordion() {
-      const input = document.getElementById('searchInput').value.toLowerCase()
-      const items = document.querySelectorAll('.accordion-item')
+    <!-- Panel de Administración -->
+    <div id="adminPanel" class="admin-panel">
+      <h2>Panel de Administración</h2>
+      <h3>Estado de Repositorios</h3>
+      <table class="repo-table">
+        <thead>
+          <tr>
+            <th>Repositorio</th>
+            <th>Estado</th>
+            <th>Descripción</th>
+          </tr>
+        </thead>
+        <tbody id="repoTableBody">
+          <!-- Se llenará dinámicamente -->
+        </tbody>
+      </table>
 
-      items.forEach(item => {
-        const title = item
-          .querySelector('.accordion-header')
-          .textContent.toLowerCase()
-        const body = item
-          .querySelector('.accordion-content')
-          .textContent.toLowerCase()
+      <!-- Sección de Monitor en Tiempo Real -->
+      <div
+        id="monitorSection"
+        style="margin-top: 30px; border-top: 1px solid #ddd; padding-top: 20px"
+      >
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+          "
+        >
+          <h3>📡 Monitor en Tiempo Real (Insights)</h3>
+          <div>
+            <span
+              id="connectionStatus"
+              style="font-size: 12px; margin-right: 10px; color: #666"
+              >Desconectado</span
+            >
+            <button
+              id="toggleMonitorBtn"
+              class="auth-button"
+              style="background: #2e7d32; padding: 6px 12px; font-size: 13px"
+              onclick="INSIGHTS.toggleStream()"
+            >
+              Conectar
+            </button>
+          </div>
+        </div>
 
-        if (title.includes(input) || body.includes(input)) {
-          item.style.display = '' // Muestra el elemento si coincide
+        <div
+          id="consoleContainer"
+          style="
+            background: #1e1e1e;
+            color: #bdbdbd;
+            font-family: 'Consolas', 'Monaco', monospace;
+            padding: 15px;
+            border-radius: 6px;
+            height: 350px;
+            overflow-y: auto;
+            font-size: 12px;
+            line-height: 1.4;
+            border: 1px solid #333;
+          "
+        >
+          <div style="color: #555; text-align: center; margin-top: 140px">
+            Presiona "Conectar" para ver los eventos del sistema en vivo...
+          </div>
+        </div>
+        <div
+          style="
+            margin-top: 10px;
+            font-size: 11px;
+            color: #666;
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+          "
+        >
+          <span style="display: inline-flex; align-items: center"
+            ><span
+              style="
+                width: 8px;
+                height: 8px;
+                background: #4caf50;
+                display: inline-block;
+                margin-right: 4px;
+                border-radius: 50%;
+              "
+            ></span
+            >Audit</span
+          >
+          <span style="display: inline-flex; align-items: center"
+            ><span
+              style="
+                width: 8px;
+                height: 8px;
+                background: #2196f3;
+                display: inline-block;
+                margin-right: 4px;
+                border-radius: 50%;
+              "
+            ></span
+            >Info</span
+          >
+          <span style="display: inline-flex; align-items: center"
+            ><span
+              style="
+                width: 8px;
+                height: 8px;
+                background: #ff9800;
+                display: inline-block;
+                margin-right: 4px;
+                border-radius: 50%;
+              "
+            ></span
+            >Warn</span
+          >
+          <span style="display: inline-flex; align-items: center"
+            ><span
+              style="
+                width: 8px;
+                height: 8px;
+                background: #f44336;
+                display: inline-block;
+                margin-right: 4px;
+                border-radius: 50%;
+              "
+            ></span
+            >Error</span
+          >
+          <span style="display: inline-flex; align-items: center"
+            ><span
+              style="
+                width: 8px;
+                height: 8px;
+                background: #9e9e9e;
+                display: inline-block;
+                margin-right: 4px;
+                border-radius: 50%;
+              "
+            ></span
+            >HTTP</span
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/insights.js"></script>
+    <script>
+      // JavaScript para controlar el acordeón
+      document.querySelectorAll(".accordion-header").forEach((header) => {
+        header.addEventListener("click", () => {
+          const accordionItem = header.parentElement;
+          accordionItem.classList.toggle("open");
+        });
+      });
+      function filterAccordion() {
+        const input = document
+          .getElementById("searchInput")
+          .value.toLowerCase();
+        const items = document.querySelectorAll(".accordion-item");
+
+        items.forEach((item) => {
+          const title = item
+            .querySelector(".accordion-header")
+            .textContent.toLowerCase();
+          const body = item
+            .querySelector(".accordion-content")
+            .textContent.toLowerCase();
+
+          if (title.includes(input) || body.includes(input)) {
+            item.style.display = ""; // Muestra el elemento si coincide
+          } else {
+            item.style.display = "none"; // Oculta el elemento si no coincide
+          }
+        });
+      }
+    </script>
+
+    <script>
+      // Repositorios disponibles localmente (montados en Docker)
+      const AVAILABLE_REPOS = [
+        {
+          name: "dev-laoz-WaveArtCSS",
+          description: "Biblioteca de estilos CSS modular",
+        },
+        {
+          name: "dev-laoz-HTML-Project-Base",
+          description: "Plantilla base para proyectos HTML",
+        },
+        {
+          name: "dev-laoz-Minificador-JS-CSS",
+          description: "Minificador de JavaScript y CSS",
+        },
+        {
+          name: "dev-laoz-image-viwer",
+          description: "Visor de imágenes dinámico",
+        },
+        {
+          name: "dev-laoz-markdown-viwer",
+          description: "Visualizador de Markdown en tiempo real",
+        },
+        {
+          name: "dev-laoz-markdown-project",
+          description: "Generador de menú basado en Markdown",
+        },
+      ];
+
+      // Funciones de UI para Login
+      function showLoginModal() {
+        document.getElementById("loginModal").classList.add("active");
+        document.getElementById("usernameInput").focus();
+      }
+
+      function closeLoginModal() {
+        document.getElementById("loginModal").classList.remove("active");
+        document.getElementById("loginMessage").innerHTML = "";
+        document.getElementById("loginForm").reset();
+      }
+
+      async function handleLogin(event) {
+        event.preventDefault();
+
+        const username = document.getElementById("usernameInput").value;
+        const password = document.getElementById("passwordInput").value;
+        const messageEl = document.getElementById("loginMessage");
+
+        messageEl.innerHTML =
+          '<div style="color: #666;">Iniciando sesión...</div>';
+
+        const result = await AUTH.login(username, password);
+
+        if (result.success) {
+          messageEl.innerHTML =
+            '<div class="success-message">✓ Login exitoso</div>';
+          setTimeout(() => {
+            closeLoginModal();
+            updateAuthUI();
+          }, 500);
         } else {
-          item.style.display = 'none' // Oculta el elemento si no coincide
+          messageEl.innerHTML = `<div class="error-message">✗ ${result.error}</div>`;
         }
-      })
-    }
-  </script>
-
-  <script>
-    // Repositorios disponibles localmente (montados en Docker)
-    const AVAILABLE_REPOS = [
-      { name: 'dev-laoz-WaveArtCSS', description: 'Biblioteca de estilos CSS modular' },
-      { name: 'dev-laoz-HTML-Project-Base', description: 'Plantilla base para proyectos HTML' },
-      { name: 'dev-laoz-Minificador-JS-CSS', description: 'Minificador de JavaScript y CSS' },
-      { name: 'dev-laoz-image-viwer', description: 'Visor de imágenes dinámico' },
-      { name: 'dev-laoz-markdown-viwer', description: 'Visualizador de Markdown en tiempo real' },
-      { name: 'dev-laoz-markdown-project', description: 'Generador de menú basado en Markdown' }
-    ];
-
-    // Funciones de UI para Login
-    function showLoginModal() {
-      document.getElementById('loginModal').classList.add('active');
-      document.getElementById('usernameInput').focus();
-    }
-
-    function closeLoginModal() {
-      document.getElementById('loginModal').classList.remove('active');
-      document.getElementById('loginMessage').innerHTML = '';
-      document.getElementById('loginForm').reset();
-    }
-
-    async function handleLogin(event) {
-      event.preventDefault();
-
-      const username = document.getElementById('usernameInput').value;
-      const password = document.getElementById('passwordInput').value;
-      const messageEl = document.getElementById('loginMessage');
-
-      messageEl.innerHTML = '<div style="color: #666;">Iniciando sesión...</div>';
-
-      const result = await AUTH.login(username, password);
-
-      if (result.success) {
-        messageEl.innerHTML = '<div class="success-message">✓ Login exitoso</div>';
-        setTimeout(() => {
-          closeLoginModal();
-          updateAuthUI();
-        }, 500);
-      } else {
-        messageEl.innerHTML = `<div class="error-message">✗ ${result.error}</div>`;
       }
-    }
 
-    function updateAuthUI() {
-      const isAuth = AUTH.isAuthenticated();
+      function updateAuthUI() {
+        const isAuth = AUTH.isAuthenticated();
 
-      // Actualizar controles del header
-      document.getElementById('loginBtn').style.display = isAuth ? 'none' : 'inline-block';
-      document.getElementById('userInfo').style.display = isAuth ? 'inline-flex' : 'none';
+        // Actualizar controles del header
+        document.getElementById("loginBtn").style.display = isAuth
+          ? "none"
+          : "inline-block";
+        document.getElementById("userInfo").style.display = isAuth
+          ? "inline-flex"
+          : "none";
 
-      if (isAuth) {
-        const userInfo = AUTH.getUserInfo();
-        document.getElementById('username').textContent = `Admin (${userInfo.userId.substring(0, 8)}...)`;
+        if (isAuth) {
+          const userInfo = AUTH.getUserInfo();
+          document.getElementById(
+            "username"
+          ).textContent = `Admin (${userInfo.userId.substring(0, 8)}...)`;
 
-        // Mostrar panel de administración
-        document.getElementById('adminPanel').classList.add('active');
-        renderRepositoriesTable();
+          // Mostrar panel de administración
+          document.getElementById("adminPanel").classList.add("active");
+          renderRepositoriesTable();
 
-        // Insertar panel después del párrafo introductorio
-        const container = document.querySelector('.container');
-        const adminPanel = document.getElementById('adminPanel');
-        const firstParagraph = container.querySelector('p');
-        if (firstParagraph && firstParagraph.nextElementSibling !== adminPanel) {
-          firstParagraph.insertAdjacentElement('afterend', adminPanel);
+          // Insertar panel después del párrafo introductorio
+          const container = document.querySelector(".container");
+          const adminPanel = document.getElementById("adminPanel");
+          const firstParagraph = container.querySelector("p");
+          if (
+            firstParagraph &&
+            firstParagraph.nextElementSibling !== adminPanel
+          ) {
+            firstParagraph.insertAdjacentElement("afterend", adminPanel);
+          }
+        } else {
+          document.getElementById("adminPanel").classList.remove("active");
         }
-      } else {
-        document.getElementById('adminPanel').classList.remove('active');
       }
-    }
 
-    function renderRepositoriesTable() {
-      const tbody = document.getElementById('repoTableBody');
-      tbody.innerHTML = '';
+      function renderRepositoriesTable() {
+        const tbody = document.getElementById("repoTableBody");
+        tbody.innerHTML = "";
 
-      AVAILABLE_REPOS.forEach(repo => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
+        AVAILABLE_REPOS.forEach((repo) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
           <td><strong>${repo.name}</strong></td>
           <td><span class="repo-status available">✓ Disponible</span></td>
           <td>${repo.description}</td>
         `;
-        tbody.appendChild(row);
-      });
+          tbody.appendChild(row);
+        });
 
-      // Agregar mensaje informativo
-      const infoRow = document.createElement('tr');
-      infoRow.innerHTML = `
+        // Agregar mensaje informativo
+        const infoRow = document.createElement("tr");
+        infoRow.innerHTML = `
         <td colspan="3" style="text-align: center; padding: 20px; color: #666; font-style: italic;">
           Los repositorios marcados como "Disponible" están montados y accesibles.<br>
           Para agregar más repositorios, consulta <a href="REPOSITORIOS_ESTADO.md" target="_blank">REPOSITORIOS_ESTADO.md</a>
         </td>
       `;
-      tbody.appendChild(infoRow);
-    }
-
-    // Cerrar modal al hacer clic fuera de él
-    document.getElementById('loginModal').addEventListener('click', function (e) {
-      if (e.target === this) {
-        closeLoginModal();
+        tbody.appendChild(infoRow);
       }
-    });
 
-    // Actualizar UI al cargar la página
-    document.addEventListener('DOMContentLoaded', () => {
-      updateAuthUI();
-    });
-  </script>
-</body>
+      // Cerrar modal al hacer clic fuera de él
+      document
+        .getElementById("loginModal")
+        .addEventListener("click", function (e) {
+          if (e.target === this) {
+            closeLoginModal();
+          }
+        });
 
+      // Actualizar UI al cargar la página
+      document.addEventListener("DOMContentLoaded", () => {
+        updateAuthUI();
+      });
+    </script>
+  </body>
 </html>
