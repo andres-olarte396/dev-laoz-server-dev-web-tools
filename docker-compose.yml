@@ -25,9 +25,10 @@ services:
     image: alpine/git
     container_name: webtools-repo-loader
     volumes:
-      - ..:/app/repos
+      - ../..:/app/repos
       - ./scripts:/scripts
       - ./CONFIGURATION.md:/CONFIGURATION.md
+      - ./nginx_repos.conf:/nginx_repos.conf
     entrypoint: ["/bin/sh", "-c"]
     command: ["sed -i 's/\\r$//' /scripts/*.sh && /scripts/ensure_repos.sh /app/repos"]
     networks:
@@ -44,16 +45,15 @@ services:
       - "8080:80"
     volumes:
       # Montar todo el directorio padre para acceder a todos los repositorios clonados
-      - ..:/var/www/html
+      - ../..:/var/www/html
       # Sobrescribir index.html y js específico del dashboard
       - ./index.html:/var/www/html/index.html:ro
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx_repos.conf:/etc/nginx/includes/nginx_repos.conf:ro
       - ./js:/var/www/html/js:ro
     networks:
       - webtools-network
     depends_on:
-      api-gateway:
-        condition: service_started
       repo-loader:
         condition: service_completed_successfully
     healthcheck:
@@ -62,218 +62,7 @@ services:
       timeout: 5s
       retries: 3
 
-  # API de Secretos
-  api-secrets:
-    build:
-      context: ../dev-laoz-api-secrets
-      dockerfile: Dockerfile
-    container_name: webtools-api-secrets
-    restart: unless-stopped
-    ports:
-      - "3501:3501"
-    environment:
-      - PORT=3501
-      - MONGO_URI=mongodb://mongodb:27017/secrets
-      - ALLOWED_IPS=api-gateway,authentication-api,authorization-api,user-api,nginx,172.16.0.0/12
-      - CERT_PATH=./keys/cert.pem
-      - KEY_PATH=./keys/key.pem
-      - ENCRYPTION_KEY=${SECRET_ENCRYPTION_KEY:-u2Ue9x8@d4g+R%f#Lp&3b^z$7k!5y*1m}
-    volumes:
-      - ../dev-laoz-api-secrets/src:/app/src:ro
-    networks:
-      - webtools-network
-    depends_on:
-      mongodb:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "wget", "--no-check-certificate", "--spider", "-q", "https://localhost:3501/api/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
 
-  # API de Observabilidad (Insights)
-  api-insights:
-    build:
-      context: ../dev-laoz-api-insights
-      dockerfile: Dockerfile
-    container_name: webtools-api-insights
-    restart: unless-stopped
-    ports:
-      - "3600:3600"
-    environment:
-      - PORT=3600
-      - MONGO_URI=mongodb://mongodb:27017/insights
-    networks:
-      - webtools-network
-    depends_on:
-      mongodb:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3600/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-
-  # API de Archivos (ApiFiles)
-  api-files:
-    build:
-      context: ../dev-laoz-api-files
-      dockerfile: Dockerfile
-    container_name: webtools-api-files
-    restart: unless-stopped
-    ports:
-      - "3700:3700"
-    environment:
-      - PORT=3700
-      - MONGO_URI=mongodb://mongodb:27017/files
-      - STORAGE_PATH=/app/uploads
-    volumes:
-      - ../dev-laoz-api-files:/app
-      - /app/node_modules
-      - /app/uploads:/app/uploads # Persistencia local de uploads
-    networks:
-      - webtools-network
-    depends_on:
-      mongodb:
-        condition: service_healthy
-
-  # API Manager (Orquestador)
-  api-manager:
-    build:
-      context: ../dev-laoz-api-manager
-      dockerfile: Dockerfile
-    container_name: webtools-api-manager
-    restart: unless-stopped
-    ports:
-      - "3800:3800"
-    environment:
-      - PORT=3800
-      - REPO_BASE_PATH=/app/repos
-    volumes:
-      - ../dev-laoz-api-manager:/app
-      - /app/node_modules
-      - /var/run/docker.sock:/var/run/docker.sock # Acceso crítico al daemon
-      - ..:/app/repos # Acceso a la carpeta de repos del host para clonar ahí
-    depends_on:
-      repo-loader:
-        condition: service_completed_successfully
-    networks:
-      - webtools-network
-    # Security note: This container has root-level access via docker.sock
-    
-  # API Gateway
-  api-gateway:
-    build:
-      context: ../dev-laoz-api-gateway
-      dockerfile: Dockerfile
-    container_name: webtools-api-gateway
-    restart: unless-stopped
-    environment:
-      LOCAL_PORT: 3002
-      NODE_ENV: production
-    ports:
-      - "3210:3002"
-    volumes:
-      - ../dev-laoz-api-gateway:/app
-      - /app/node_modules
-    networks:
-      - webtools-network
-    depends_on:
-      authentication-api:
-        condition: service_healthy
-      authorization-api:
-        condition: service_healthy
-      user-api:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3002/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-      start_period: 30s
-
-  # Authentication API
-  authentication-api:
-    build:
-      context: ../dev-laoz-authentication-api
-      dockerfile: Dockerfile
-    container_name: webtools-authentication-api
-    restart: unless-stopped
-    environment:
-      MONGO_URI: mongodb://mongodb:27017/webtools
-      JWT_SECRET: ${JWT_SECRET:-default-secret-change-in-production}
-      LOCAL_PORT: 4000
-      NODE_ENV: production
-    ports:
-      - "4000:4000"
-    volumes:
-      - ../dev-laoz-authentication-api:/app
-      - /app/node_modules
-    networks:
-      - webtools-network
-    depends_on:
-      mongodb:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:4000/api/auth/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-      start_period: 30s
-
-  # Authorization API
-  authorization-api:
-    build:
-      context: ../dev-laoz-authorization-api
-      dockerfile: Dockerfile
-    container_name: webtools-authorization-api
-    restart: unless-stopped
-    environment:
-      JWT_SECRET: ${JWT_SECRET:-default-secret-change-in-production}
-      LOCAL_PORT: 5000
-      NODE_ENV: production
-    ports:
-      - "5000:5000"
-    volumes:
-      - ../dev-laoz-authorization-api:/app
-      - /app/node_modules
-    networks:
-      - webtools-network
-    healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:5000/api/authorization/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-      start_period: 30s
-
-  # User API
-  user-api:
-    build:
-      context: ../dev-laoz-api-user
-      dockerfile: Dockerfile
-    container_name: webtools-user-api
-    restart: unless-stopped
-    environment:
-      MONGO_URI: mongodb://mongodb:27017/webtools
-      JWT_SECRET: ${JWT_SECRET:-default-secret-change-in-production}
-      LOCAL_PORT: 6000
-      NODE_ENV: production
-    ports:
-      - "6000:6000"
-    volumes:
-      - ../dev-laoz-api-user:/app
-      - /app/node_modules
-    networks:
-      - webtools-network
-    depends_on:
-      mongodb:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:6000/api/user/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-      start_period: 30s
 
 networks:
   webtools-network:
